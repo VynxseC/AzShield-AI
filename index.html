@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AzShield AI v4.0 — Hybrid Sandbox, Adaptive ML & Blue Team Threat Intel SOC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #050912;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-weight: 600;
+    }
+    .soc-card {
+      background: linear-gradient(180deg, #0f172a 0%, #090e1c 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55);
+    }
+    .tab-btn {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+    }
+    .tab-btn:hover {
+      background-color: #1e293b;
+      color: #ffffff;
+    }
+    .tab-active {
+      background: linear-gradient(90deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 22px rgba(14, 165, 233, 0.45);
+    }
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .no-print { display: none !important; }
+      .soc-card { background: #ffffff !important; border: 1px solid #64748b !important; box-shadow: none !important; color: #000000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top SOC Header -->
+  <header class="border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-[1440px] mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-sky-500/15 border-2 border-sky-400/60 flex items-center justify-center text-2xl">
+          🛡️
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-2xl font-extrabold tracking-tight text-white">AzShield <span class="text-sky-400">AI</span></h1>
+            <span class="text-xs font-mono font-extrabold uppercase px-2.5 py-0.5 rounded-md bg-sky-500/20 text-sky-300 border border-sky-400/50">v4.0 HYBRID SOC</span>
+          </div>
+          <p class="text-sm font-semibold text-slate-200">Hibrid Sandbox • Özü-Öyrənən ML • Multi-Engine Blue Team Threat Intel</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 no-print">
+        <button onclick="resetMLMemory()" class="px-3.5 py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600/35 text-purple-200 border border-purple-400/50 text-xs font-mono font-bold transition">
+          🧠 ML Yaddaşını Sıfırla
+        </button>
+        <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-extrabold transition shadow-lg">
+          📄 Tam SOC Hesabatı (PDF)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1440px] w-full mx-auto px-6 py-6 space-y-6 flex-1">
+
+    <!-- Executive Telemetry Bar -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="soc-card rounded-xl p-4">
+        <div class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Blue Team Threat Intel</div>
+        <div class="text-2xl font-extrabold text-white mt-1">8 Mühərrik <span class="text-sm font-bold text-sky-400">VT + Hybrid</span></div>
+      </div>
+      <div class="soc-card rounded-xl p-4">
+        <div class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Öyrənilmiş ML Nümunələri</div>
+        <div id="kpi-ml-count" class="text-2xl font-extrabold text-purple-400 mt-1">0 Nümunə <span class="text-sm font-bold text-slate-200">Adaptive AI</span></div>
+      </div>
+      <div class="soc-card rounded-xl p-4">
+        <div class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Skan Sürəti (Latency)</div>
+        <div id="kpi-latency" class="text-2xl font-extrabold text-emerald-400 mt-1">24 ms <span class="text-sm font-bold text-slate-200">Real-Time</span></div>
+      </div>
+      <div class="soc-card rounded-xl p-4">
+        <div class="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold">Aşkarlanan İnsidentlər</div>
+        <div id="kpi-threats" class="text-2xl font-extrabold text-rose-400 mt-1">3 <span class="text-sm font-bold text-slate-200">Kritik Təhlükə</span></div>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left 5 Cols: Input Modules + XAI Console -->
+      <div class="lg:col-span-5 space-y-6 no-print">
+        <div class="soc-card rounded-2xl p-6">
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-3">1. Analiz Modulunu Seçin</div>
+          
+          <div class="grid grid-cols-2 gap-2.5 mb-5">
+            <button onclick="switchTab('url')" id="tab-url" class="tab-btn tab-active py-3 px-3 rounded-xl font-extrabold text-sm transition text-left">
+              🌐 URL & Klik İzləmə
+            </button>
+            <button onclick="switchTab('email')" id="tab-email" class="tab-btn py-3 px-3 rounded-xl font-extrabold text-sm transition text-left">
+              📧 Gmail SMTP & ML
+            </button>
+            <button onclick="switchTab('text')" id="tab-text" class="tab-btn py-3 px-3 rounded-xl font-extrabold text-sm transition text-left">
+              🧠 AI SMS / Scam
+            </button>
+            <button onclick="switchTab('apk')" id="tab-apk" class="tab-btn py-3 px-3 rounded-xl font-extrabold text-sm transition text-left">
+              📱 Hibrid APK Sandbox
+            </button>
+          </div>
+
+          <!-- Module 1: URL -->
+          <div id="panel-url" class="space-y-4">
+            <div>
+              <label class="block text-sm font-extrabold text-white mb-1.5">Şübhəli Veb Link və ya Tracking URL</label>
+              <input id="url-input" type="text" placeholder="http://kapitaIbank-bonus.xyz/verify?uid=victim_994" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-sky-400 font-mono" />
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="fillUrl('http://kapitaIbank-bonus.xyz/verify?uid=victim_994')" class="text-xs font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg border border-rose-400/50">⚡ Saxta Bank + Klik Tracker</button>
+              <button onclick="fillUrl('https://kapitalbank.az')" class="text-xs font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 px-3 py-1.5 rounded-lg border border-emerald-400/50">✓ Rəsmi Kapital Bank</button>
+            </div>
+            <button onclick="analyzeUrl()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg">Hibrid URL, Klik Statusu & Threat Intel Analizi</button>
+          </div>
+
+          <!-- Module 2: Email & SMTP -->
+          <div id="panel-email" class="hidden space-y-4">
+            <div>
+              <label class="block text-sm font-extrabold text-white mb-1.5">Gmail / SMTP Başlıqları (1-ci dəfə öyrənir, 2-ci dəfə 1 ms-də bloklayır)</label>
+              <textarea id="email-input" rows="5" placeholder="Gmail-də 'Show original' edib bura yapışdırın..." class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-xs font-bold text-white focus:outline-none focus:border-sky-400 font-mono"></textarea>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="fillSpoofEmail()" class="text-xs font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg border border-rose-400/50">⚡ Saxta Bank SMTP (ML Test)</button>
+              <button onclick="fillCleanEmail()" class="text-xs font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 px-3 py-1.5 rounded-lg border border-emerald-400/50">✓ Rəsmi Universitet Email</button>
+            </div>
+            <button onclick="analyzeEmail()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg">SMTP Forensics & Self-Learning ML Analizi</button>
+          </div>
+
+          <!-- Module 3: SMS / Text -->
+          <div id="panel-text" class="hidden space-y-4">
+            <div>
+              <label class="block text-sm font-extrabold text-white mb-1.5">WhatsApp / Telegram / SMS Mesajı</label>
+              <textarea id="text-input" rows="4" placeholder="Şübhəli mesajı bura yapışdırın..." class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-sky-400"></textarea>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="fillText('HÖRMƏTLİ MÜŞTƏRİ! Kapital Bank hesabınıza 450 AZN dövlət kompensasiyası köçürülüb. 24 saat ərzində təsdiqləməsəniz kartınız bloklanacaq. Kart məlumatları və SMS kodu daxil edin: http://abb-yardim.online')" class="text-xs font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg border border-rose-400/50">⚡ Saxta Kompensasiya SMS</button>
+              <button onclick="fillText('Salam, sabah saat 10:00-da Odlar Yurdu Universitetində hakaton təqdimatı başlayır.')" class="text-xs font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 px-3 py-1.5 rounded-lg border border-emerald-400/50">✓ Normal Mesaj</button>
+            </div>
+            <button onclick="analyzeText()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg">AI NLP & ML Yaddaş Analizi</button>
+          </div>
+
+          <!-- Module 4: APK -->
+          <div id="panel-apk" class="hidden space-y-4">
+            <div>
+              <label class="block text-sm font-extrabold text-white mb-1.5">Android Paket Faylı (.APK)</label>
+              <div class="border-2 border-dashed border-slate-600 rounded-xl p-5 text-center bg-slate-950">
+                <input id="apk-input" type="file" accept=".apk,.zip" class="block w-full text-sm font-bold text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-extrabold file:bg-sky-600 file:text-white hover:file:bg-sky-500 cursor-pointer" />
+                <p class="text-xs font-bold text-slate-300 mt-2.5">Statik (Manifest, DEX, Entropy) + Dinamik ART Sandbox Davranış Analizi.</p>
+              </div>
+            </div>
+            <button onclick="analyzeApk()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg">Hibrid APK Sandbox & YARA Skanı</button>
+          </div>
+        </div>
+
+        <!-- Step-by-Step XAI Execution Pipeline -->
+        <div class="soc-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-mono font-extrabold text-sky-400">>_ XAI EXECUTION & ML TRACE</span>
+            <span class="text-xs font-mono font-bold text-slate-300">LIVE LOG</span>
+          </div>
+          <div id="engine-logs" class="bg-black border border-slate-700 rounded-xl p-4 font-mono text-xs font-bold text-emerald-300 space-y-2 max-h-64 overflow-y-auto">
+            <div class="text-slate-200">[READY] AzShield AI v4.0 Hibrid Sandbox və Self-Learning ML hazırdır...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right 7 Cols: Bold High-Contrast Results, 3 Charts, Hybrid Sandbox & 8 Blue Team Engines -->
+      <div class="lg:col-span-7 soc-card rounded-2xl p-6 space-y-6">
+        
+        <!-- Adaptive ML Fast-Path Alert Banner (Shows when ML recognizes a previously learned threat) -->
+        <div id="ml-banner" class="hidden rounded-xl p-4 bg-purple-950/70 border-2 border-purple-400 text-white">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🧠</span>
+            <div>
+              <div class="text-sm font-extrabold text-purple-200 uppercase tracking-wide">ADAPTIVE ML FAST-PATH HIT — TƏKRAR ARAŞDIRMAYA EHTİYAC QALMADI!</div>
+              <div id="ml-banner-desc" class="text-sm font-bold text-white mt-0.5"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verdict Banner -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-700 pb-5">
+          <div class="flex items-center gap-4">
+            <div id="score-box" class="w-24 h-24 rounded-2xl bg-slate-950 border-2 border-slate-600 flex flex-col items-center justify-center shrink-0">
+              <span id="score-val" class="text-3xl font-black text-white">--</span>
+              <span class="text-[11px] font-mono text-slate-200 font-extrabold">RİSK BALI</span>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5">
+                <span id="status-badge" class="text-xs font-extrabold px-3 py-1 rounded-md bg-slate-800 text-white">GÖZLƏNİLİR</span>
+                <span id="latency-badge" class="text-xs font-mono font-bold text-sky-300">0 ms</span>
+                <span id="click-badge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-600">Klik Statusu: Gözlənilir</span>
+              </div>
+              <h2 id="result-target" class="text-xl font-extrabold text-white mt-1.5">Forensik Hesabat Gözlənilir</h2>
+              <div id="mitre-tags" class="flex flex-wrap gap-2 mt-2">
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-600">MITRE ATT&CK® Framework</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hybrid Analysis Box (Static + Dynamic Sandbox Behaviors) -->
+        <div class="rounded-xl bg-slate-950 border border-slate-700 p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-purple-300 font-extrabold">🧪 HİBRİD ANALİZ: STATİK + DİNAMİK SANDBOX DAVRANIŞI</span>
+            <div class="flex gap-2 text-xs font-mono font-extrabold">
+              <span id="static-pill" class="px-2.5 py-1 rounded bg-sky-500/20 text-sky-300 border border-sky-400/40">Statik: --%</span>
+              <span id="dynamic-pill" class="px-2.5 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-400/40">Dinamik Sandbox: --%</span>
+            </div>
+          </div>
+          <div id="hybrid-actions-list" class="space-y-1.5 text-sm font-bold text-white">
+            <div class="text-slate-300">Skan başladıqda virtual sandbox daxilində icra olunan davranışlar burada göstəriləcək.</div>
+          </div>
+        </div>
+
+        <!-- Visual Sandbox Preview -->
+        <div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2">🖥️ Artefakt Önizləməsi və Klik/DOM Sübutu</div>
+          <div id="sandbox-container">
+            <div class="rounded-xl border border-slate-700 bg-slate-950 p-4 text-sm font-bold text-slate-300">
+              URL homoglyph fərqi, SMTP hop cədvəli və ya APK entropy strukturu burada görünəcək.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 CHARTS GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-950 border border-slate-700 rounded-xl p-4">
+          <div>
+            <div class="text-xs font-mono text-center text-white font-extrabold mb-2">1. Təhlükə Vektoru (Radar)</div>
+            <div class="h-48 flex items-center justify-center">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-center text-white font-extrabold mb-2">2. Blue Team Konsensusu</div>
+            <div class="h-48 flex items-center justify-center">
+              <canvas id="consensusChart"></canvas>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-center text-white font-extrabold mb-2">3. Hibrid & Qayda Balları</div>
+            <div class="h-48 flex items-center justify-center">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table 1: 8 Blue Team Threat Intelligence Engines (VirusTotal, Hybrid-Analysis, etc.) -->
+        <div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2">🌐 Multi-Engine Blue Team Threat Intelligence Yoxlanışı (8 Platforma)</div>
+          <div class="overflow-x-auto rounded-xl border border-slate-700">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-900 text-white font-mono text-xs font-extrabold border-b border-slate-700">
+                <tr>
+                  <th class="py-3 px-3.5">Blue Team Platforması</th>
+                  <th class="py-3 px-3.5">Nəticə</th>
+                  <th class="py-3 px-3.5">Dəqiqlik</th>
+                  <th class="py-3 px-3.5">Texniki Qeyd</th>
+                </tr>
+              </thead>
+              <tbody id="intel-table-body" class="divide-y divide-slate-800 bg-slate-950 text-white font-bold">
+                <tr>
+                  <td colspan="4" class="py-4 px-4 text-center text-slate-300">VirusTotal, Hybrid-Analysis, URLhaus, Any.Run və digər mühərrik nəticələri burada görünəcək.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Table 2: Detection Rules & Proof Matrix -->
+        <div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2">📊 Aşkarlanan Qaydalar və Texniki Sübutlar Cədvəli</div>
+          <div class="overflow-x-auto rounded-xl border border-slate-700">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-900 text-white font-mono text-xs font-extrabold border-b border-slate-700">
+                <tr>
+                  <th class="py-3 px-3.5">Qayda ID</th>
+                  <th class="py-3 px-3.5">Kateqoriya</th>
+                  <th class="py-3 px-3.5">Texniki Sübut / İzahat</th>
+                  <th class="py-3 px-3.5 text-right">Bal</th>
+                </tr>
+              </thead>
+              <tbody id="rules-table-body" class="divide-y divide-slate-800 bg-slate-950 text-white font-bold">
+                <tr>
+                  <td colspan="4" class="py-4 px-4 text-center text-slate-300">Hələ skan aparılmayıb.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Table 3: Deep Telemetry -->
+        <div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2">🛰️ Dərin İnfrastruktur, Klik & Metadata Telemetriyası</div>
+          <div class="overflow-x-auto rounded-xl border border-slate-700">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-900 text-white font-mono text-xs font-extrabold border-b border-slate-700">
+                <tr>
+                  <th class="py-3 px-3.5 w-1/3">Parametr</th>
+                  <th class="py-3 px-3.5">Aşkarlanan Dəyər</th>
+                  <th class="py-3 px-3.5 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="telemetry-table-body" class="divide-y divide-slate-800 bg-slate-950 text-white font-bold">
+                <tr>
+                  <td colspan="3" class="py-4 px-4 text-center text-slate-300">DNS, SSL, IP, Klik sayı və SHA-256 burada göstəriləcək.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let threatCount = 3;
+
+    // Chart 1: Radar
+    const radarChart = new Chart(document.getElementById('radarChart').getContext('2d'), {
+      type: 'radar',
+      data: {
+        labels: ['İnfrastruktur', 'Sosial Müh.', 'Brend Təqlidi', 'Məlumat Oğurluğu', 'Zərərli Kod'],
+        datasets: [{
+          data: [10, 10, 10, 10, 10],
+          backgroundColor: 'rgba(56, 189, 248, 0.25)',
+          borderColor: '#38bdf8',
+          pointBackgroundColor: '#38bdf8',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 0, max: 100,
+            ticks: { display: false },
+            grid: { color: 'rgba(148, 163, 184, 0.25)' },
+            angleLines: { color: 'rgba(148, 163, 184, 0.25)' },
+            pointLabels: { color: '#ffffff', font: { size: 10, family: 'Plus Jakarta Sans', weight: '700' } }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Chart 2: Blue Team Consensus Doughnut
+    const consensusChart = new Chart(document.getElementById('consensusChart').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Malicious', 'Suspicious', 'Clean'],
+        datasets: [{
+          data: [0, 0, 8],
+          backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#ffffff', font: { size: 10, weight: '700' } } }
+        }
+      }
+    });
+
+    // Chart 3: Hybrid Static vs Dynamic + Rules Bar
+    const barChart = new Chart(document.getElementById('barChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Statik', 'Dinamik', 'Yekun'],
+        datasets: [{
+          data: [0, 0, 0],
+          backgroundColor: ['#38bdf8', '#a855f7', '#f43f5e'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 100, grid: { color: 'rgba(148, 163, 184, 0.2)' }, ticks: { color: '#ffffff', font: { size: 10, weight: '700' } } },
+          x: { grid: { display: false }, ticks: { color: '#ffffff', font: { size: 10, weight: '700' } } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    function switchTab(tab) {
+      ['url', 'email', 'text', 'apk'].forEach(t => {
+        document.getElementById('panel-' + t).classList.add('hidden');
+        document.getElementById('tab-' + t).classList.remove('tab-active');
+      });
+      document.getElementById('panel-' + tab).classList.remove('hidden');
+      document.getElementById('tab-' + tab).classList.add('tab-active');
+    }
+
+    function fillUrl(v) { document.getElementById('url-input').value = v; }
+    function fillText(v) { document.getElementById('text-input').value = v; }
+
+    function fillSpoofEmail() {
+      document.getElementById('email-input').value =
+`From: Kapital Bank Tehlukesizlik <security@kapitalbank.az>
+Return-Path: <bounce-alert@promo-server-ru.xyz>
+Reply-To: <verify-account@birbank-support.online>
+Subject: TECILI: Kartinizda subheli emeliyyat - Hesabiniz bloklanacaq
+Authentication-Results: mx.google.com; spf=fail (sender IP is 185.220.101.44); dkim=none; dmarc=fail
+Received: from mail-relay-09.promo-server-ru.xyz (185.220.101.44) by mx.az-mail.az; Mon, 16 Nov 2026 19:10:00 +0400
+
+Hormetli musteri, kartinizi tesdiqleyin eks halda bloklanacaq: http://kapitaIbank-bonus.xyz/login`;
+    }
+
+    function fillCleanEmail() {
+      document.getElementById('email-input').value =
+`From: Odlar Yurdu Universiteti <hackathon@oyu.edu.az>
+Return-Path: <hackathon@oyu.edu.az>
+Reply-To: <hackathon@oyu.edu.az>
+Subject: OYU CyberAI Hackathon 2026 Tesdiq Mektubu
+Authentication-Results: mx.google.com; spf=pass; dkim=pass; dmarc=pass
+Received: from mail.oyu.edu.az (85.132.44.12) by mx.google.com; Mon, 16 Nov 2026 18:00:00 +0400
+
+Salam, komandanizin qeydiyyati ugurla tesdiqlendi.`;
+    }
+
+    async function resetMLMemory() {
+      await fetch('/api/reset-ml', { method: 'POST' });
+      document.getElementById('kpi-ml-count').innerHTML = `0 Nümunə <span class="text-sm font-bold text-slate-200">Adaptive AI</span>`;
+      document.getElementById('ml-banner').classList.add('hidden');
+      document.getElementById('engine-logs').innerHTML = `<div class="text-purple-300 font-bold">[ML-RESET] Öyrənilmiş ML yaddaşı və klik sayğacı sıfırlandı.</div>`;
+    }
+
+    function renderReport(data) {
+      const score = data.score;
+      const scoreBox = document.getElementById('score-box');
+      const scoreVal = document.getElementById('score-val');
+      const badge = document.getElementById('status-badge');
+
+      scoreVal.innerText = score + '%';
+      document.getElementById('result-target').innerText = data.target;
+      document.getElementById('latency-badge').innerText = data.latency_ms + ' ms';
+      document.getElementById('kpi-latency').innerHTML = `${data.latency_ms} ms <span class="text-sm font-bold text-slate-200">Real-Time</span>`;
+      document.getElementById('kpi-ml-count').innerHTML = `${data.ml_learned_count} Nümunə <span class="text-sm font-bold text-slate-200">Adaptive AI</span>`;
+      document.getElementById('click-badge').innerText = `🖱️ ${data.click_info.status_text}`;
+      document.getElementById('sandbox-container').innerHTML = data.sandbox_html;
+
+      // ML Fast-Path Banner
+      const mlBanner = document.getElementById('ml-banner');
+      if (data.ml_cache_hit) {
+        mlBanner.classList.remove('hidden');
+        document.getElementById('ml-banner-desc').innerText = `Oxşarlıq: ${data.ml_similarity}% | Cavab müddəti: ${data.latency_ms} ms — Bu təhlükə əvvəlki skandan öyrənilib və təkrar araşdırmaya ehtiyac qalmadan dərhal bloklandı!`;
+      } else {
+        mlBanner.classList.add('hidden');
+      }
+
+      // Hybrid Analysis Section
+      document.getElementById('static-pill').innerText = `Statik: ${data.static_score}%`;
+      document.getElementById('dynamic-pill').innerText = `Dinamik Sandbox: ${data.dynamic_score}%`;
+      document.getElementById('hybrid-actions-list').innerHTML = data.hybrid_actions.map(a =>
+        `<div class="flex items-start gap-2"><span class="text-purple-400">▸</span><span>${a}</span></div>`
+      ).join('');
+
+      let colorHex = '#10b981';
+      if (score >= 60) {
+        colorHex = '#f43f5e';
+        badge.className = "text-xs font-extrabold px-3 py-1 rounded-md bg-rose-500/25 text-rose-200 border border-rose-400";
+        scoreBox.className = "w-24 h-24 rounded-2xl bg-rose-950/60 border-2 border-rose-500 flex flex-col items-center justify-center shrink-0";
+        scoreVal.className = "text-3xl font-black text-rose-400";
+        threatCount++;
+        document.getElementById('kpi-threats').innerHTML = `${threatCount} <span class="text-sm font-bold text-slate-200">Kritik Təhlükə</span>`;
+      } else if (score >= 30) {
+        colorHex = '#f59e0b';
+        badge.className = "text-xs font-extrabold px-3 py-1 rounded-md bg-amber-500/25 text-amber-200 border border-amber-400";
+        scoreBox.className = "w-24 h-24 rounded-2xl bg-amber-950/60 border-2 border-amber-500 flex flex-col items-center justify-center shrink-0";
+        scoreVal.className = "text-3xl font-black text-amber-400";
+      } else {
+        badge.className = "text-xs font-extrabold px-3 py-1 rounded-md bg-emerald-500/25 text-emerald-200 border border-emerald-400";
+        scoreBox.className = "w-24 h-24 rounded-2xl bg-emerald-950/60 border-2 border-emerald-500 flex flex-col items-center justify-center shrink-0";
+        scoreVal.className = "text-3xl font-black text-emerald-400";
+      }
+      badge.innerText = data.level;
+
+      // MITRE Tags
+      document.getElementById('mitre-tags').innerHTML = data.mitre.map(m =>
+        `<span class="text-xs font-mono font-extrabold px-2.5 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/50">${m}</span>`
+      ).join('');
+
+      // Chart 1: Radar
+      radarChart.data.datasets[0].data = data.axes;
+      radarChart.data.datasets[0].borderColor = colorHex;
+      radarChart.data.datasets[0].pointBackgroundColor = colorHex;
+      radarChart.data.datasets[0].backgroundColor = colorHex + '33';
+      radarChart.update();
+
+      // Chart 2: Blue Team Consensus
+      let malCnt = 0, susCnt = 0, clnCnt = 0;
+      data.intel_engines.forEach(e => {
+        if (e.verdict.includes('MALICIOUS') || e.verdict.includes('FLAGGED') || e.verdict.includes('HIGH') || e.verdict.includes('VERIFIED PHISH') || e.verdict.includes('BLOCKED')) malCnt++;
+        else if (e.verdict.includes('SUSPICIOUS') || e.verdict.includes('MODERATE') || e.verdict.includes('PENDING') || e.verdict.includes('WARNING') || e.verdict.includes('UNKNOWN')) susCnt++;
+        else clnCnt++;
+      });
+      consensusChart.data.datasets[0].data = [malCnt, susCnt, clnCnt];
+      consensusChart.update();
+
+      // Chart 3: Hybrid Bar
+      barChart.data.datasets[0].data = [data.static_score, data.dynamic_score, score];
+      barChart.update();
+
+      // Table 1: 8 Blue Team Engines
+      document.getElementById('intel-table-body').innerHTML = data.intel_engines.map(e => {
+        const isBad = e.verdict.includes('MALICIOUS') || e.verdict.includes('BLOCKED') || e.verdict.includes('VERIFIED PHISH') || e.verdict.includes('HIGH') || e.verdict.includes('FLAGGED');
+        const isWarn = e.verdict.includes('SUSPICIOUS') || e.verdict.includes('WARNING') || e.verdict.includes('MODERATE');
+        const vClass = isBad ? 'bg-rose-500/25 text-rose-200 border border-rose-400/50' : (isWarn ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50' : 'bg-emerald-500/25 text-emerald-200 border border-emerald-400/50');
+        return `
+          <tr class="hover:bg-slate-900">
+            <td class="py-3 px-3.5 font-extrabold text-white">${e.engine}</td>
+            <td class="py-3 px-3.5"><span class="px-2.5 py-0.5 rounded font-mono text-xs font-extrabold ${vClass}">${e.verdict}</span></td>
+            <td class="py-3 px-3.5 font-mono text-sky-300 font-extrabold">${e.confidence}</td>
+            <td class="py-3 px-3.5 text-slate-100 font-bold">${e.detail}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Table 2: Rules
+      document.getElementById('rules-table-body').innerHTML = data.rules.map(r => `
+        <tr class="hover:bg-slate-900">
+          <td class="py-3 px-3.5 font-mono text-xs font-extrabold text-sky-300">${r.id}</td>
+          <td class="py-3 px-3.5 font-extrabold text-white">${r.category}</td>
+          <td class="py-3 px-3.5 text-white font-bold">${r.proof}</td>
+          <td class="py-3 px-3.5 text-right font-mono font-extrabold ${r.weight >= 25 ? 'text-rose-400' : 'text-amber-300'}">+${r.weight} bal</td>
+        </tr>
+      `).join('');
+
+      // Table 3: Telemetry
+      document.getElementById('telemetry-table-body').innerHTML = data.telemetry.map(t => {
+        const stBadge = t.status === 'CRIT'
+          ? '<span class="px-2.5 py-0.5 rounded bg-rose-500/25 text-rose-200 font-mono text-xs font-extrabold">KRİTİK</span>'
+          : (t.status === 'WARN'
+            ? '<span class="px-2.5 py-0.5 rounded bg-amber-500/25 text-amber-200 font-mono text-xs font-extrabold">ŞÜBHƏLİ</span>'
+            : '<span class="px-2.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200 font-mono text-xs font-extrabold">OK</span>');
+        return `
+          <tr class="hover:bg-slate-900">
+            <td class="py-3 px-3.5 font-extrabold text-slate-200">${t.param}</td>
+            <td class="py-3 px-3.5 font-mono text-xs font-bold text-white break-all">${t.value}</td>
+            <td class="py-3 px-3.5 text-right">${stBadge}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Logs
+      document.getElementById('engine-logs').innerHTML = data.logs.map(l => {
+        const cls = l.includes('ML-FASTPATH') || l.includes('ML-TRAIN')
+          ? 'text-purple-300 font-extrabold'
+          : ((l.includes('SPOOF') || l.includes('DETECT') || l.includes('YARA')) ? 'text-rose-300 font-extrabold' : 'text-emerald-300 font-bold');
+        return `<div class="${cls}">${l}</div>`;
+      }).join('');
+    }
+
+    async function analyzeUrl() {
+      const url = document.getElementById('url-input').value;
+      if (!url) return;
+      const res = await fetch('/api/scan-url', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+      renderReport(await res.json());
+    }
+
+    async function analyzeEmail() {
+      const raw_email = document.getElementById('email-input').value;
+      if (!raw_email) return;
+      const res = await fetch('/api/scan-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ raw_email }) });
+      renderReport(await res.json());
+    }
+
+    async function analyzeText() {
+      const text = document.getElementById('text-input').value;
+      if (!text) return;
+      const res = await fetch('/api/scan-text', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+      renderReport(await res.json());
+    }
+
+    async function analyzeApk() {
+      const inp = document.getElementById('apk-input');
+      if (!inp.files.length) return;
+      const fd = new FormData();
+      fd.append('file', inp.files[0]);
+      const res = await fetch('/api/scan-apk', { method: 'POST', body: fd });
+      renderReport(await res.json());
+    }
+  </script>
+</body>
+</html>
