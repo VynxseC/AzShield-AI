@@ -39,6 +39,17 @@
       color: #ffffff !important;
       box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
     }
+    .edu-tab-active {
+      background: linear-gradient(90deg, #2563eb, #0284c7) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-animate { animation: modalFadeIn 0.25s ease-out forwards; }
     @media print {
       body { background: #ffffff !important; color: #000000 !important; }
       .no-print { display: none !important; }
@@ -51,7 +62,7 @@
   <!-- TOP NAVIGATION BAR -->
   <nav class="border-b border-slate-800 bg-[#0b101d]/95 sticky top-0 z-40 px-4 sm:px-6 py-3">
     <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-5">
+      <div class="flex items-center gap-4">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/60 flex items-center justify-center text-blue-400 font-black">🛡️</div>
           <span class="font-black text-base tracking-tight text-white">AzShield<span class="text-sky-400">IQ</span> <span class="text-[11px] font-mono text-emerald-400">v6.1</span></span>
@@ -64,6 +75,12 @@
 
       <div class="flex flex-wrap items-center gap-2 no-print">
         <span id="top-status-pill" class="px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-slate-700 font-mono text-xs font-black">● SİSTEM HAZIRDIR</span>
+
+        <!-- YENİ: KİBER TƏLİM AKADEMİYASI DÜYMƏSİ -->
+        <button type="button" onclick="openTrainingModal('url')" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white border border-sky-300/60 text-xs font-black shadow-lg shadow-sky-500/25 transition cursor-pointer">
+          🎓 Kiber Təlim (4 Modul)
+        </button>
+
         <button type="button" onclick="runBenchmark()" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/60 text-xs font-mono font-black transition">
           📊 Model Metrikaları (F1 / FPR)
         </button>
@@ -82,6 +99,245 @@
       </div>
     </div>
   </nav>
+
+  <!-- INTERAKTIV KIBER TELIM AKADEMIYASI MODALI -->
+  <div id="training-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto no-print">
+    <div class="modal-animate w-full max-w-[1280px] rounded-2xl bg-[#0b1120] border-2 border-sky-400/70 shadow-2xl overflow-hidden my-auto">
+
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-[#0f172a] via-[#13203c] to-[#0f172a] px-6 py-4 border-b border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400 flex items-center justify-center text-xl">🎓</div>
+          <div>
+            <h2 class="text-base sm:text-lg font-black text-white">AzShield IQ — İnteraktiv Fişinq & Kiber Maarifləndirmə Təlimi</h2>
+            <p class="text-xs text-sky-300 font-mono">Fişinq nədir? URL, SMS, Gmail SMTP və APK hücumlarını necə ayırd etməli?</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeTrainingModal()" class="px-3.5 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/60 text-rose-200 text-xs font-black cursor-pointer">
+          ✕ Təlimi Bağla
+        </button>
+      </div>
+
+      <!-- Fişinq Nədir? Qısa Vizual Banner -->
+      <div class="px-6 py-3 bg-sky-950/40 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2.5 text-slate-200">
+          <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-300 font-mono font-black">FİŞİNQ NƏDİR?</span>
+          <span>Hücumçuların özünü rəsmi bank və ya dövlət qurumu kimi göstərərək kart məlumatı, OTP kodu və ya şifrə oğurlamaq üsuludur.</span>
+        </div>
+        <span class="text-emerald-300 font-mono font-black">4 Əsas Hücum Vektoru</span>
+      </div>
+
+      <!-- 5 Təlim Tabları -->
+      <div class="px-6 pt-4 flex flex-wrap gap-2 border-b border-slate-800 pb-3 bg-[#080d19]">
+        <button type="button" id="edu-btn-url" onclick="switchEduTab('url')" class="edu-tab-active px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-black transition cursor-pointer">
+          1. 🌐 URL & Domen (.az vs .xxx/.xyz)
+        </button>
+        <button type="button" id="edu-btn-sms" onclick="switchEduTab('sms')" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-black transition cursor-pointer">
+          2. 🧠 SMS & Sosial Mühəndislik
+        </button>
+        <button type="button" id="edu-btn-email" onclick="switchEduTab('email')" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-black transition cursor-pointer">
+          3. 📧 Gmail / SMTP Saxtakarlığı
+        </button>
+        <button type="button" id="edu-btn-apk" onclick="switchEduTab('apk')" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-black transition cursor-pointer">
+          4. 📱 Zərərli APK Tətbiqləri
+        </button>
+        <button type="button" id="edu-btn-quiz" onclick="switchEduTab('quiz')" class="ml-auto px-4 py-2 rounded-xl border border-amber-400/60 bg-amber-500/20 text-amber-200 text-xs font-black transition cursor-pointer">
+          🎯 Özünü Yoxla (Mini Test)
+        </button>
+      </div>
+
+      <!-- Təlim Məzmunu -->
+      <div class="p-6 max-h-[68vh] overflow-y-auto space-y-5">
+
+        <!-- 1. URL & DOMEN TƏLİMİ -->
+        <div id="edu-panel-url" class="space-y-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Normal Hal -->
+            <div class="rounded-xl p-4 bg-emerald-950/25 border-2 border-emerald-500/60 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-black">✅ NORMAL VƏ TƏHLÜKƏSİZ DOMEN</span>
+                <span class="text-xs text-emerald-400 font-mono">Rəsmi .AZ Zonası</span>
+              </div>
+              <div class="p-3 rounded-lg bg-[#050912] border border-emerald-500/40 font-mono text-sm flex flex-wrap items-center gap-1">
+                <span class="text-emerald-400">https://</span>
+                <span class="text-white font-black">kapitalbank</span>
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-300 font-black">.az</span>
+              </div>
+              <ul class="space-y-1.5 text-xs text-slate-200">
+                <li>✔ Azərbaycan bankları və dövlət qurumları rəsmi olaraq <b class="text-emerald-300">.az</b> və <b class="text-emerald-300">.gov.az</b> domenlərindən istifadə edir.</li>
+                <li>✔ Hərflər tam dəqiqdir, əlavə tire (<code>-bonus</code>, <code>-yardim</code>) və ya qəribə sonluq yoxdur.</li>
+              </ul>
+              <button type="button" onclick="launchDemoFromTraining('url', 'https://kapitalbank.az')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ Bu Rəsmi Linki Skanerdə Yoxla ➤
+              </button>
+            </div>
+
+            <!-- Təhlükəli Hal -->
+            <div class="rounded-xl p-4 bg-rose-950/25 border-2 border-rose-500/70 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-300 font-mono text-xs font-black">🚨 NORMAL DEYİL (FİŞİNQ / TƏQLİD)</span>
+                <span class="text-xs text-rose-400 font-mono">.XXX / .XYZ / Typosquatting</span>
+              </div>
+              <div class="p-3 rounded-lg bg-[#050912] border border-rose-500/50 font-mono text-sm flex flex-wrap items-center gap-1">
+                <span class="text-rose-400">http://</span>
+                <span class="text-white font-black">kap<span class="px-1 rounded bg-rose-600 text-white">ta</span>lbank</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-200 font-black">.xxx / .xyz</span>
+              </div>
+              <ul class="space-y-1.5 text-xs text-slate-200">
+                <li>✖ <b class="text-rose-300">Şübhəli TLD Sonluğu:</b> Heç bir rəsmi bank müştərisinə <code>.xxx</code>, <code>.xyz</code>, <code>.top</code> və ya <code>.online</code> sonluqlu link göndərmir.</li>
+                <li>✖ <b class="text-rose-300">Typosquatting & Homoglyph:</b> <code>kaptalbank.az</code> ("i" hərfi düşüb) və ya <code>kapitaIbank</code> (kiçik "l" yerinə böyük "I") kimi göz aldadan üsullardan istifadə olunur.</li>
+              </ul>
+              <button type="button" onclick="launchDemoFromTraining('url', 'http://kaptalbank.az')" class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ "kaptalbank.az" Linkini Canlı Tut ➤
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SMS & SOSİAL MÜHƏNDİSLİK TƏLİMİ -->
+        <div id="edu-panel-sms" class="hidden space-y-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl p-4 bg-emerald-950/25 border-2 border-emerald-500/60 space-y-3">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-black">✅ REAL BANK OTP MESAJI</span>
+              <div class="p-3.5 rounded-xl bg-[#050912] border border-emerald-500/40 text-xs text-slate-200 space-y-2">
+                <div class="text-emerald-400 font-mono text-[11px]">Göndərən: Birbank / KapitalBank</div>
+                <p>"Birbank təsdiq kodu: <b>482910</b>. Təhlükəsizlik üçün <span class="px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200">OTP kodunu heç kimə verməyin</span>, bank əməkdaşları sizdən kod istəmir."</p>
+              </div>
+              <p class="text-xs text-slate-300">✔ Rəsmi SMS-lərdə <b>pul hədiyyəsi vədi</b> və <b>kənar link</b> olmur; əksinə kodu gizli saxlamaq barədə xəbərdarlıq edilir.</p>
+              <button type="button" onclick="launchDemoFromTraining('text', 'Birbank tesdiq kodu: 482910. Tehlukesizlik ucun OTP kodunu hec kime vermeyin, bank emekdaslari sizden kod istemir.')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ Real Bank OTP-ni NLP-də Yoxla ➤
+              </button>
+            </div>
+
+            <div class="rounded-xl p-4 bg-rose-950/25 border-2 border-rose-500/70 space-y-3">
+              <span class="px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-300 font-mono text-xs font-black">🚨 ŞİRNİKLƏNDİRİCİ SCAM / FİŞİNQ SMS</span>
+              <div class="p-3.5 rounded-xl bg-[#050912] border border-rose-500/50 text-xs text-slate-200 space-y-2">
+                <div class="text-rose-400 font-mono text-[11px]">Göndərən: +994 50 XXX XX XX (Şəxsi nömrə)</div>
+                <p>"Təbriklər! <span class="px-1.5 py-0.5 rounded bg-rose-600/40 text-rose-200">100 AZN əldə edəcəksən!</span> Hesabınıza köçürülməsi üçün <span class="underline text-amber-300">24 saat ərzində</span> linkə daxil olub SMS kodu yazın."</p>
+              </div>
+              <p class="text-xs text-slate-300">✖ <b>İki əsas tələ:</b> 1) Havayı pul/kompensasiya vədi (şirnikləndirmə), 2) Təcili vaxt məhdudiyyəti ilə panika yaratmaq.</p>
+              <button type="button" onclick="launchDemoFromTraining('text', 'Tebrikler! 100 azn elde edeceksen, linke kecid et ve tesdiqle: http://kaptalbank.az')" class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ "100 AZN" Scam Mesajını Tut ➤
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. GMAIL / SMTP TƏLİMİ -->
+        <div id="edu-panel-email" class="hidden space-y-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl p-4 bg-emerald-950/25 border-2 border-emerald-500/60 space-y-3">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-black">✅ ORİJİNAL KORPORATİV E-POÇT</span>
+              <div class="p-3 rounded-lg bg-[#050912] border border-emerald-500/40 font-mono text-xs space-y-1.5">
+                <div><span class="text-slate-400">From:</span> <span class="text-white">hackathon@oyu.edu.az</span></div>
+                <div><span class="text-slate-400">Return-Path:</span> <span class="text-emerald-300">hackathon@oyu.edu.az (Eynidir)</span></div>
+                <div><span class="text-slate-400">Auth:</span> <span class="text-emerald-400 font-black">SPF=PASS | DKIM=PASS | DMARC=PASS</span></div>
+              </div>
+              <p class="text-xs text-slate-300">✔ Göndərən domenlə cavab/qayıdış serveri eynidir və rəqəmsal imzalar (DKIM/DMARC) təsdiqlənib.</p>
+              <button type="button" onclick="launchDemoFromTraining('email', 'clean')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ Təmiz SMTP Başlığını Skan Et ➤
+              </button>
+            </div>
+
+            <div class="rounded-xl p-4 bg-rose-950/25 border-2 border-rose-500/70 space-y-3">
+              <span class="px-2.5 py-1 rounded-lg bg-rose-500/25 text-rose-300 font-mono text-xs font-black">🚨 SAXTA (SPOOFED) SMTP MƏKTUB</span>
+              <div class="p-3 rounded-lg bg-[#050912] border border-rose-500/50 font-mono text-xs space-y-1.5">
+                <div><span class="text-slate-400">From:</span> <span class="text-amber-300">security@kapitalbank.az (Maska)</span></div>
+                <div><span class="text-slate-400">Return-Path:</span> <span class="text-rose-400 font-black">bounce@promo-server-ru.xyz (Fərqlidir!)</span></div>
+                <div><span class="text-slate-400">Auth:</span> <span class="text-rose-400 font-black">SPF=FAIL | DKIM=NONE | DMARC=FAIL</span></div>
+              </div>
+              <p class="text-xs text-slate-300">✖ Hücumçu <code>From</code> hissəsinə bankın adını yazsa da, SMTP <code>Return-Path</code> və <code>DMARC=FAIL</code> onun əsl serverini ifşa edir.</p>
+              <button type="button" onclick="launchDemoFromTraining('email', 'spoof')" class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-black transition cursor-pointer">
+                ⚡ Saxta SMTP Məktubunu Tut ➤
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. APK TƏLİMİ -->
+        <div id="edu-panel-apk" class="hidden space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="rounded-xl p-4 bg-slate-900/90 border border-rose-500/50 space-y-2">
+              <div class="text-rose-400 font-mono text-xs font-black">1. TƏHLÜKƏLİ İCAZƏLƏR</div>
+              <h4 class="text-sm font-black text-white">Accessibility + READ_SMS</h4>
+              <p class="text-xs text-slate-300">Adi kalkulyator, oyun və ya "bank yeniləməsi" adı ilə gələn APK faylı ekranınızı oxumaq (<code>BIND_ACCESSIBILITY_SERVICE</code>) və bank SMS-lərini (<code>READ_SMS</code>) ələ keçirmək istəyirsə, bu 100% bank troyanıdır.</p>
+            </div>
+            <div class="rounded-xl p-4 bg-slate-900/90 border border-amber-500/50 space-y-2">
+              <div class="text-amber-400 font-mono text-xs font-black">2. YÜKSƏK DEX ENTROPİYASI</div>
+              <h4 class="text-sm font-black text-white">Shannon Entropy &gt; 7.2</h4>
+              <p class="text-xs text-slate-300">Zərərli proqramlar antiviruslardan gizlənmək üçün daxili <code>classes.dex</code> kodunu şifrələyir (Packer). AzShield faylı işə salmadan entropiyanı ölçüb gizli kodu tutur.</p>
+            </div>
+            <div class="rounded-xl p-4 bg-slate-900/90 border border-sky-500/50 space-y-2">
+              <div class="text-sky-400 font-mono text-xs font-black">3. GİZLİ TELEGRAM C2 KANALI</div>
+              <h4 class="text-sm font-black text-white">api.telegram.org/bot...</h4>
+              <p class="text-xs text-slate-300">Müasir Android troyanları oğurladığı kart və OTP kodlarını öz serverinə yox, gizli Telegram botlarına göndərir. AzShield baytkod daxilində bu C2 ünvanlarını aşkarlayır.</p>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-blue-950/40 border border-sky-400/40 flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs text-slate-200">💡 <b>Qızıl Qayda:</b> WhatsApp və ya Telegram qruplarından göndərilən <code>.apk</code> fayllarını heç vaxt quraşdırmayın, yalnız rəsmi Google Play / App Store istifadə edin.</span>
+            <button type="button" onclick="launchDemoFromTraining('apk', '')" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-black transition cursor-pointer">
+              📱 APK Sandbox Bölməsinə Keç ➤
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. İNTERAKTİV MİNİ-TEST (QUIZ) -->
+        <div id="edu-panel-quiz" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-black text-white">🎯 Özünü Yoxla: Aşağıdakı 4 nümunədən hansı təhlükəlidir?</span>
+            <span id="quiz-score-badge" class="px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400 text-sky-300 font-mono text-xs font-black">Nəticə: 0 / 4</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Sual 1 -->
+            <div id="q-card-1" class="rounded-xl p-4 bg-slate-900/90 border border-slate-700 space-y-2.5">
+              <div class="text-[11px] font-mono text-sky-400">SUAL 1 • DOMEN ANALİZİ</div>
+              <div class="p-2.5 rounded bg-[#050912] font-mono text-xs text-white">http://leobank-hediyye.xxx/login</div>
+              <div class="flex gap-2">
+                <button type="button" onclick="answerQuiz(1, false)" class="flex-1 py-1.5 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-emerald-200 text-xs font-black cursor-pointer">✅ Normaldır</button>
+                <button type="button" onclick="answerQuiz(1, true)" class="flex-1 py-1.5 rounded bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500 text-rose-200 text-xs font-black cursor-pointer">🚨 Fişinqdir</button>
+              </div>
+              <div id="q-res-1" class="text-xs font-bold hidden"></div>
+            </div>
+
+            <!-- Sual 2 -->
+            <div id="q-card-2" class="rounded-xl p-4 bg-slate-900/90 border border-slate-700 space-y-2.5">
+              <div class="text-[11px] font-mono text-sky-400">SUAL 2 • SMS ANALİZİ</div>
+              <div class="p-2.5 rounded bg-[#050912] text-xs text-white">"250 AZN dövlət yardımı qazandınız! Kart nömrənizi daxil edin."</div>
+              <div class="flex gap-2">
+                <button type="button" onclick="answerQuiz(2, false)" class="flex-1 py-1.5 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-emerald-200 text-xs font-black cursor-pointer">✅ Normaldır</button>
+                <button type="button" onclick="answerQuiz(2, true)" class="flex-1 py-1.5 rounded bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500 text-rose-200 text-xs font-black cursor-pointer">🚨 Fişinqdir</button>
+              </div>
+              <div id="q-res-2" class="text-xs font-bold hidden"></div>
+            </div>
+
+            <!-- Sual 3 -->
+            <div id="q-card-3" class="rounded-xl p-4 bg-slate-900/90 border border-slate-700 space-y-2.5">
+              <div class="text-[11px] font-mono text-sky-400">SUAL 3 • RƏSMİ XƏBƏRDARLIQ</div>
+              <div class="p-2.5 rounded bg-[#050912] text-xs text-white">"Təsdiq kodu: 9104. Təhlükəsizlik üçün kodu heç kimə verməyin."</div>
+              <div class="flex gap-2">
+                <button type="button" onclick="answerQuiz(3, true)" class="flex-1 py-1.5 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-emerald-200 text-xs font-black cursor-pointer">✅ Normaldır</button>
+                <button type="button" onclick="answerQuiz(3, false)" class="flex-1 py-1.5 rounded bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500 text-rose-200 text-xs font-black cursor-pointer">🚨 Fişinqdir</button>
+              </div>
+              <div id="q-res-3" class="text-xs font-bold hidden"></div>
+            </div>
+
+            <!-- Sual 4 -->
+            <div id="q-card-4" class="rounded-xl p-4 bg-slate-900/90 border border-slate-700 space-y-2.5">
+              <div class="text-[11px] font-mono text-sky-400">SUAL 4 • APK FAYLI</div>
+              <div class="p-2.5 rounded bg-[#050912] text-xs text-white">WhatsApp-dan gələn "Kapital_Bonus.apk" faylı READ_SMS icazəsi istəyir.</div>
+              <div class="flex gap-2">
+                <button type="button" onclick="answerQuiz(4, false)" class="flex-1 py-1.5 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-emerald-200 text-xs font-black cursor-pointer">✅ Normaldır</button>
+                <button type="button" onclick="answerQuiz(4, true)" class="flex-1 py-1.5 rounded bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500 text-rose-200 text-xs font-black cursor-pointer">🚨 Fişinq / Troyan</button>
+              </div>
+              <div id="q-res-4" class="text-xs font-bold hidden"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- BENCHMARK PANEL -->
   <div id="benchmark-panel" class="hidden max-w-[1720px] w-full mx-auto px-4 sm:px-6 pt-4 no-print">
@@ -180,8 +436,8 @@
 
         <!-- URL Panel -->
         <div id="panel-url" class="flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
-          <input id="url-input" type="text" value="http://kapitaIbank-bonus.xyz/verify?uid=victim_994" placeholder="URL və ya IP daxil edin..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-black text-white focus:outline-none focus:border-sky-400" />
-          <button type="button" onclick="fillUrl('http://kapitaIbank-bonus.xyz/verify?uid=victim_994')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Homoglyph URL</button>
+          <input id="url-input" type="text" value="http://kaptalbank.az" placeholder="URL və ya IP daxil edin..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-black text-white focus:outline-none focus:border-sky-400" />
+          <button type="button" onclick="fillUrl('http://kaptalbank.az')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Typosquatting</button>
           <button type="button" onclick="fillUrl('http://2130706433/admin')" class="px-2.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/50 text-xs font-black shrink-0">🛡️ SSRF Test</button>
           <button type="button" onclick="fillUrl('https://kapitalbank.az')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/50 text-xs font-black shrink-0">✓ Rəsmi</button>
           <button type="button" onclick="analyzeUrl()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">Skan Et ➤</button>
@@ -198,7 +454,7 @@
         <!-- SMS Panel -->
         <div id="panel-text" class="hidden flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
           <textarea id="text-input" rows="1" placeholder="Şübhəli SMS / WhatsApp mesajını yazın..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-black text-white focus:outline-none focus:border-sky-400"></textarea>
-          <button type="button" onclick="fillText('HORMETLI MUSTERI! Kapital Bank hesabınıza 450 AZN dovlet kompensasiyasi kocurulub. 24 saat erzinde tesdiqlemeseniz kartiniz bloklanacaq. Kart melumatlari ve SMS kodu daxil edin: http://abb-yardim.online')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Scam SMS</button>
+          <button type="button" onclick="fillText('Tebrikler! 100 azn elde edeceksen, linke kecid et ve tesdiqle: http://kaptalbank.az')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Scam SMS</button>
           <button type="button" onclick="fillText('Birbank tesdiq kodu: 482910. Tehlukesizlik ucun OTP kodunu hec kime vermeyin, bank emekdaslari sizden kod istemir.')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/50 text-xs font-black shrink-0">✓ Real Bank OTP</button>
           <button type="button" onclick="analyzeText()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">NLP Analiz ➤</button>
         </div>
@@ -228,7 +484,7 @@
       </div>
     </div>
 
-    <!-- MAIN SIEM GRID (STABLE 3 COLUMNS) -->
+    <!-- MAIN SIEM GRID -->
     <section id="threat-map-box" class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
 
       <!-- LEFT COLUMN (4 Cols) -->
@@ -281,7 +537,7 @@
             </div>
             <div id="attack-feed-list" class="space-y-2 text-[11px] font-mono font-bold">
               <div class="flex items-center justify-between text-slate-200">
-                <span class="truncate"><span class="text-rose-400">●</span> Homoglyph Phishing</span>
+                <span class="truncate"><span class="text-rose-400">●</span> Typosquatting (.az)</span>
                 <span class="text-amber-300 shrink-0">185.220.101.44 → .AZ</span>
               </div>
               <div class="flex items-center justify-between text-slate-200">
@@ -384,7 +640,7 @@
                   <circle cx="18" cy="18" r="14" fill="none" stroke="#1e293b" stroke-width="3.5"></circle>
                   <circle cx="18" cy="18" r="14" fill="none" stroke="#10b981" stroke-width="3.5" stroke-dasharray="88" stroke-dashoffset="6" stroke-linecap="round"></circle>
                 </svg>
-                <span class="absolute text-[11px] font-mono font-black text-emerald-300">92.3%</span>
+                <span class="absolute text-[11px] font-mono font-black text-emerald-300">92.9%</span>
               </div>
               <div class="text-[10px] text-slate-400 font-black mt-1">Holdout F1</div>
             </div>
@@ -413,7 +669,7 @@
             <span id="click-badge" class="text-xs font-mono font-black px-2 py-0.5 rounded bg-slate-900 text-amber-300 border border-slate-700">Status: Hazır</span>
           </div>
           <div id="engine-logs" class="bg-[#060911] border border-slate-800 rounded-lg p-3.5 font-mono text-xs font-bold text-emerald-300 space-y-1.5 max-h-60 overflow-y-auto">
-            <div class="text-slate-200">[READY] AzShield IQ v6.1 aktivdir. Yuxarıdan "Skan Et ➤" düyməsini sıxın...</div>
+            <div class="text-slate-200">[READY] AzShield IQ v6.1 aktivdir. Yuxarıdan "Skan Et ➤" düyməsini sıxın və ya "🎓 Kiber Təlim" bölməsinə baxın...</div>
           </div>
         </div>
 
@@ -437,7 +693,7 @@
         </div>
         <div id="sandbox-container">
           <div class="rounded-lg border border-slate-800 bg-[#060911] p-4 text-xs font-bold text-slate-300">
-            Confusable/Homoglyph normalizasiyası, SMTP relay IP zənciri və ya per-entry APK entropy strukturu burada göstəriləcək.
+            Typosquatting/Homoglyph normalizasiyası, SMTP relay IP zənciri və ya per-entry APK entropy strukturu burada göstəriləcək.
           </div>
         </div>
       </div>
@@ -446,7 +702,7 @@
     <!-- TABLES SECTION -->
     <section id="tables-section" class="space-y-4">
       <div class="siem-card rounded-xl p-4">
-        <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-black mb-2.5">🌐 Multi-Engine Threat Intelligence (Local Heuristics + Live URLhaus + Illustrative Feeds)</div>
+        <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-black mb-2.5">🌐 Multi-Engine Threat Intelligence (Local Heuristics + Typosquatting Guard + AZ NLP)</div>
         <div class="overflow-x-auto rounded-lg border border-slate-800">
           <table class="w-full text-left text-xs">
             <thead class="bg-[#070b14] text-white font-mono font-black border-b border-slate-800">
@@ -511,6 +767,72 @@
       document.getElementById('file-protocol-warning').classList.remove('hidden');
     }
 
+    // ---------------- KİBER TƏLİM AKADEMİYASI MƏNTİQİ ----------------
+    const quizAnswered = {};
+    let quizCorrectCount = 0;
+
+    window.openTrainingModal = function(tab = 'url') {
+      document.getElementById('training-modal').classList.remove('hidden');
+      switchEduTab(tab);
+    };
+
+    window.closeTrainingModal = function() {
+      document.getElementById('training-modal').classList.add('hidden');
+    };
+
+    window.switchEduTab = function(tab) {
+      ['url', 'sms', 'email', 'apk', 'quiz'].forEach(t => {
+        document.getElementById('edu-panel-' + t).classList.add('hidden');
+        document.getElementById('edu-btn-' + t).classList.remove('edu-tab-active');
+      });
+      document.getElementById('edu-panel-' + tab).classList.remove('hidden');
+      document.getElementById('edu-btn-' + tab).classList.add('edu-tab-active');
+    };
+
+    window.launchDemoFromTraining = function(mode, sampleValue) {
+      closeTrainingModal();
+      switchTab(mode);
+      if (mode === 'url') {
+        fillUrl(sampleValue);
+        analyzeUrl();
+      } else if (mode === 'text') {
+        fillText(sampleValue);
+        analyzeText();
+      } else if (mode === 'email') {
+        if (sampleValue === 'spoof') fillSpoofEmail();
+        else fillCleanEmail();
+        analyzeEmail();
+      }
+    };
+
+    window.answerQuiz = function(qNum, isCorrect) {
+      if (quizAnswered[qNum]) return;
+      quizAnswered[qNum] = true;
+      const resEl = document.getElementById('q-res-' + qNum);
+      const cardEl = document.getElementById('q-card-' + qNum);
+      resEl.classList.remove('hidden');
+
+      const explanations = {
+        1: "Doğrudur! Rəsmi banklar heç vaxt '.xxx' sonluğu və '-hediyye' kimi saxta domenlərdən istifadə etmir.",
+        2: "Doğrudur! '250 AZN qazandınız' kimi pul vədi klassik sosial mühəndislik (şirnikləndirmə) tələsidir.",
+        3: "Doğrudur! Burada link yoxdur və bank kodu heç kimə verməməyi tövsiyə edir (Negasiya qoruması).",
+        4: "Doğrudur! Kənar mənbədən gələn APK faylının READ_SMS icazəsi istəməsi OTP oğurluğu əlamətidir."
+      };
+
+      if (isCorrect) {
+        quizCorrectCount++;
+        cardEl.classList.add('border-emerald-500');
+        resEl.className = 'text-xs font-bold text-emerald-300';
+        resEl.innerText = '✅ ' + explanations[qNum];
+      } else {
+        cardEl.classList.add('border-rose-500');
+        resEl.className = 'text-xs font-bold text-rose-300';
+        resEl.innerText = '❌ Yanlış seçim! ' + explanations[qNum];
+      }
+      document.getElementById('quiz-score-badge').innerText = 'Nəticə: ' + quizCorrectCount + ' / 4';
+    };
+
+    // ---------------- ƏSAS SOC & SKANER FUNKSİYALARI ----------------
     const ANALYST_TOKEN = 'AZSHIELD-SOC-2026';
     let onlineOsintMode = true;
     let totalBlocked = 12345;
@@ -551,7 +873,7 @@
         "Subject: TECILI: Kartinizda subheli emeliyyat - Hesabiniz bloklanacaq\n" +
         "Authentication-Results: mx.google.com; spf=fail (sender IP is 185.220.101.44); dkim=none; dmarc=fail\n" +
         "Received: from mail-relay-09.promo-server-ru.xyz (185.220.101.44) by mx.az-mail.az; Mon, 16 Nov 2026 19:10:00 +0400\n\n" +
-        "Hormetli musteri, kartinizi tesdiqleyin eks halda bloklanacaq: http://kapitaIbank-bonus.xyz/login";
+        "Hormetli musteri, kartinizi tesdiqleyin eks halda bloklanacaq: http://kaptalbank.az/login";
     };
 
     window.fillCleanEmail = function() {
@@ -669,7 +991,7 @@
 
     window.analyzeUrl = async function() {
       const inp = document.getElementById('url-input');
-      if (!inp.value.trim()) inp.value = 'http://kapitaIbank-bonus.xyz/verify?uid=victim_994';
+      if (!inp.value.trim()) inp.value = 'http://kaptalbank.az';
       await executeScan('/api/scan-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -689,7 +1011,7 @@
 
     window.analyzeText = async function() {
       const inp = document.getElementById('text-input');
-      if (!inp.value.trim()) window.fillText('HORMETLI MUSTERI! Kapital Bank hesabınıza 450 AZN dovlet kompensasiyasi kocurulub. 24 saat erzinde tesdiqlemeseniz kartiniz bloklanacaq. Kart melumatlari ve SMS kodu daxil edin: http://abb-yardim.online');
+      if (!inp.value.trim()) window.fillText('Tebrikler! 100 azn elde edeceksen, linke kecid et ve tesdiqle: http://kaptalbank.az');
       await executeScan('/api/scan-text', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -770,7 +1092,7 @@
       if (score >= 60) {
         colorHex = '#f43f5e';
         pill.className = 'px-3 py-1 rounded-full bg-rose-500/25 text-rose-200 border border-rose-400 font-mono text-xs font-black';
-        pill.innerText = '🚨 ' + (data.level || 'KRİTİK TƏHLÜKƏ');
+        pill.innerText = data.level || '🚨 TƏHLÜKƏLİ / ALERT!';
         totalBlocked++;
         document.getElementById('kpi-total-threats').innerText = totalBlocked.toLocaleString();
 
@@ -782,7 +1104,7 @@
         if (feed.children.length > 4) feed.removeChild(feed.lastChild);
       } else {
         pill.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 font-mono text-xs font-black';
-        pill.innerText = '✓ ' + (data.level || 'TƏHLÜKƏSİZ');
+        pill.innerText = data.level || '✅ TƏHLÜKƏSİZ';
       }
 
       if (radarChart && data.axes) {
@@ -855,7 +1177,7 @@
       document.getElementById('engine-logs').innerHTML = (data.logs || []).map(l => {
         const cls = l.includes('ML-FASTPATH') || l.includes('FALSE-POSITIVE')
           ? 'text-purple-300 font-black'
-          : ((l.includes('SPOOF') || l.includes('DETECT') || l.includes('SSRF') || l.includes('HOMOGLYPH') || l.includes('ADVERSARIAL')) ? 'text-rose-300 font-black' : 'text-emerald-300 font-bold');
+          : ((l.includes('SPOOF') || l.includes('DETECT') || l.includes('SSRF') || l.includes('HOMOGLYPH') || l.includes('ALERT')) ? 'text-rose-300 font-black' : 'text-emerald-300 font-bold');
         return '<div class="' + cls + '">' + l + '</div>';
       }).join('');
     }
