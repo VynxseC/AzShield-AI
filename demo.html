@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AzShield IQ v6.1 — Real 3D İnteraktiv Video İzah</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #04070f;
+      color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    /* YUXARI HUD PANELİ */
+    .top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.22);
+      background: rgba(5, 9, 18, 0.82);
+      backdrop-filter: blur(12px);
+      z-index: 30;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 900; letter-spacing: 0.4px; }
+    .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; }
+    .brand span { color: #38bdf8; }
+    .scene-badge {
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.65);
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      color: #7dd3fc;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    /* 3D SƏHNƏ VƏ KAMERA FƏZASI */
+    .viewport-3d {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      perspective: 1350px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas#bg3d {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .camera-rig {
+      position: relative;
+      z-index: 10;
+      width: 1120px;
+      height: 420px;
+      transform-style: preserve-3d;
+      transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 3D HOLOQRAFİK MODULLAR */
+    .holo-card {
+      position: absolute;
+      width: 265px;
+      background: linear-gradient(160deg, rgba(15, 23, 42, 0.92) 0%, rgba(7, 12, 24, 0.96) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.28);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      transform-style: preserve-3d;
+      transition: all 0.85s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+      opacity: 0.42;
+      filter: blur(1.5px);
+    }
+
+    /* 3D Fəzada Yerləşmə Koordinatları */
+    #card-1 { transform: translate3d(-435px, 8px, -30px) rotateY(22deg); }
+    #card-2 { transform: translate3d(-145px, -12px, 45px) rotateY(7deg); }
+    #card-3 { transform: translate3d(145px, -12px, 45px) rotateY(-7deg); }
+    #card-4 { transform: translate3d(435px, 8px, -30px) rotateY(-22deg); }
+
+    .holo-card.focused {
+      opacity: 1;
+      filter: blur(0px);
+      border-color: #38bdf8;
+      box-shadow: 0 0 45px rgba(56, 189, 248, 0.45), 0 30px 60px rgba(0, 0, 0, 0.9);
+    }
+    .holo-card.focused-danger {
+      opacity: 1;
+      filter: blur(0px);
+      border-color: #f43f5e;
+      box-shadow: 0 0 55px rgba(244, 63, 94, 0.55), 0 30px 60px rgba(0, 0, 0, 0.9);
+    }
+
+    /* 3D Dərinlik Qatları (Kartın içindəki elementlər önə çıxır) */
+    .card-tag {
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      transform: translateZ(18px);
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 12px;
+      transform: translateZ(24px);
+    }
+    .screen-box {
+      background: #04070e;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #cbd5e1;
+      transform: translateZ(15px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Skaner Lazer Xətti */
+    .scan-laser {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+      box-shadow: 0 0 12px #38bdf8;
+      top: -10px;
+      opacity: 0;
+    }
+    .scanning .scan-laser {
+      opacity: 1;
+      animation: laserSweep 1.4s linear infinite;
+    }
+    @keyframes laserSweep {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    /* İnteraktiv UI Düyməsi */
+    .ui-input {
+      background: #090f1d;
+      border: 1px solid #334155;
+      border-radius: 7px;
+      padding: 7px 9px;
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      color: #38bdf8;
+      margin-bottom: 10px;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      transform: translateZ(20px);
+    }
+    .typing-caret {
+      display: inline-block;
+      width: 6px;
+      height: 13px;
+      background: #38bdf8;
+      margin-left: 3px;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .action-btn {
+      width: 100%;
+      padding: 9px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #2563eb, #0284c7);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 12px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+      transform: translateZ(30px);
+      transition: transform 0.18s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+    .action-btn.pressed {
+      transform: translateZ(14px) scale(0.93);
+      background: linear-gradient(90deg, #059669, #10b981);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.8);
+    }
+
+    /* HƏQİQİ SVG SİÇAN KURSORU VƏ KLİK DALĞASI */
+    #real-cursor {
+      position: fixed;
+      z-index: 100;
+      width: 28px;
+      height: 28px;
+      pointer-events: none;
+      left: 12%;
+      top: 78%;
+      transition: left 0.85s cubic-bezier(0.22, 1, 0.36, 1), top 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.15s ease;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.85));
+    }
+    #real-cursor.clicking {
+      transform: scale(0.8) rotate(-8deg);
+    }
+    .click-ripple {
+      position: fixed;
+      z-index: 99;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2.5px solid #38bdf8;
+      box-shadow: 0 0 15px #38bdf8;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.2);
+      animation: rippleOut 0.65s ease-out forwards;
+    }
+    @keyframes rippleOut {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(4.2); }
+    }
+
+    /* AŞAĞI ALT YAZI VƏ İDARƏETMƏ */
+    .subtitle-dock {
+      z-index: 30;
+      background: rgba(5, 9, 18, 0.94);
+      border-top: 1.5px solid rgba(56, 189, 248, 0.45);
+      backdrop-filter: blur(14px);
+      padding: 16px 32px;
+      text-align: center;
+    }
+    .sub-caption {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      max-width: 1020px;
+      margin: 0 auto 10px;
+      line-height: 1.45;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    }
+    .timeline-track {
+      max-width: 620px;
+      height: 5px;
+      background: #1e293b;
+      border-radius: 999px;
+      margin: 0 auto 12px;
+      overflow: hidden;
+    }
+    .timeline-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #f43f5e);
+      transition: width 0.4s ease;
+    }
+    .hud-btns { display: flex; justify-content: center; gap: 12px; }
+    .hud-btns button {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid #38bdf8;
+      background: linear-gradient(90deg, #2563eb, #0284c7);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+    .hud-btns button.ghost {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #475569;
+      box-shadow: none;
+    }
+    .hidden-hud { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- HƏQİQİ SVG KURSOR -->
+  <svg id="real-cursor" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5.5 3.5L22.5 14.2L14.3 16.3L18.2 24.1L15.1 25.6L11.2 17.8L5.5 22.8V3.5Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="2" stroke-linejoin="round"/>
+  </svg>
+
+  <div class="top-hud">
+    <div class="brand"><div class="brand-dot"></div>🛡️ AzShield<span>IQ</span> v6.1 — 3D Canlı Sistem Memarlığı</div>
+    <div id="scene-badge" class="scene-badge">HAZIRDIR • REAL 3D TƏQDİMAT</div>
+  </div>
+
+  <div class="viewport-3d" id="viewport">
+    <canvas id="bg3d"></canvas>
+
+    <div class="camera-rig" id="camera-rig">
+      <!-- MODUL 1 -->
+      <div class="holo-card" id="card-1">
+        <div class="card-tag">01 • GİRİŞ INTERFEYSİ</div>
+        <div class="card-title">Hədəf Sorğusu</div>
+        <div class="ui-input" id="typed-url">Gözlənilir...<span class="typing-caret"></span></div>
+        <div class="screen-box" id="box-1">
+          Rejim: <b style="color:#34d399">Local-First</b><br/>
+          Xarici Bulud: <b style="color:#94a3b8">Qapalı</b>
+        </div>
+        <div class="action-btn" id="target-scan-btn" style="margin-top:12px;">Skan Et ➤</div>
+      </div>
+
+      <!-- MODUL 2 -->
+      <div class="holo-card" id="card-2">
+        <div class="card-tag">02 • PYTHON ENGINE</div>
+        <div class="card-title">4 Dərin Analiz Modulu</div>
+        <div class="screen-box" id="box-2">
+          <div class="scan-laser"></div>
+          • Deep SSRF Guard<br/>
+          • Homoglyph (I vs l)<br/>
+          • AZ Morfoloji NLP<br/>
+          • APK Entropy & C2
+        </div>
+      </div>
+
+      <!-- MODUL 3 -->
+      <div class="holo-card" id="card-3">
+        <div class="card-tag">03 • 3D TELEMETRİYA</div>
+        <div class="card-title">Qlobus & Baku SOC</div>
+        <div class="screen-box" id="box-3">
+          Relay IP: <b>185.220.101.44</b><br/>
+          Hədəf: <b>BAKU SOC (.AZ)</b><br/>
+          Klik Sayğacı: <b>0 dəfə</b>
+        </div>
+      </div>
+
+      <!-- MODUL 4 -->
+      <div class="holo-card" id="card-4">
+        <div class="card-tag">04 • YEKUN QƏRAR</div>
+        <div class="card-title">Avto-Blok & İxrac</div>
+        <div class="screen-box" id="box-4">
+          Risk Balı: <b id="score-counter" style="font-size:15px;">0%</b><br/>
+          • Firewall EDL List<br/>
+          • STIX 2.1 Threat Feed<br/>
+          • Telegram SOC Alert
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subtitle-dock">
+    <div id="sub-caption" class="sub-caption">
+      "▶ 3D İzahı Başlat" düyməsinə basın — kamera 3D fəzada hərəkət edərək bütün sistemi canlı göstərəcək.
+    </div>
+    <div class="timeline-track"><div id="timeline-bar" class="timeline-bar"></div></div>
+    <div class="hud-btns" id="hud-btns">
+      <button onclick="start3DPresentation()">▶ 3D İzahı Başlat</button>
+      <button class="ghost" onclick="toggleHud()">👁️ Düymələri Gizlət (H)</button>
+    </div>
+  </div>
+
+  <script>
+    // ---------------- 3D VOLUMETRİK CANVAS FONU ----------------
+    const canvas = document.getElementById('bg3d');
+    const ctx = canvas.getContext('2d');
+    let rotY = 0, pulse = 0, stageMode = 0;
+    let mouseOffsetX = 0, mouseOffsetY = 0;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // 3D Ulduz/Data Hissəcikləri
+    const particles = Array.from({ length: 110 }, () => ({
+      x: (Math.random() - 0.5) * 1800,
+      y: (Math.random() - 0.5) * 1000,
+      z: Math.random() * 1200 + 100,
+      size: Math.random() * 2.2 + 0.8
+    }));
+
+    function draw3DWorld() {
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Dərin Kosmos İşıq Halesi
+      const bgGlow = ctx.createRadialGradient(w / 2, h * 0.45, 40, w / 2, h * 0.45, w * 0.65);
+      bgGlow.addColorStop(0, stageMode === 4 ? 'rgba(244, 63, 94, 0.14)' : 'rgba(14, 165, 233, 0.15)');
+      bgGlow.addColorStop(1, 'rgba(4, 7, 15, 0)');
+      ctx.fillStyle = bgGlow;
+      ctx.fillRect(0, 0, w, h);
+
+      // 3D Hissəciklər (Z-oxu üzrə axın)
+      particles.forEach(p => {
+        p.z -= 2.4;
+        if (p.z <= 20) p.z = 1200;
+        const scale = 420 / p.z;
+        const sx = w / 2 + (p.x + mouseOffsetX * 80) * scale;
+        const sy = h / 2 + (p.y + mouseOffsetY * 50) * scale;
+        const alpha = Math.min(0.85, (1200 - p.z) / 900);
+        ctx.fillStyle = stageMode === 4 ? `rgba(251, 113, 133, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(sx, sy, p.size * scale, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 3D Perspektiv Döşəmə Toru
+      const horizon = h * 0.56;
+      ctx.strokeStyle = stageMode === 4 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(56, 189, 248, 0.12)';
+      ctx.lineWidth = 1;
+      for (let i = -14; i <= 14; i++) {
+        ctx.beginPath();
+        ctx.moveTo(w / 2 + i * 40 + mouseOffsetX * 25, horizon);
+        ctx.lineTo(w / 2 + i * 210 + mouseOffsetX * 60, h);
+        ctx.stroke();
+      }
+      for (let row = 0; row < 12; row++) {
+        const y = horizon + Math.pow(row / 12, 1.7) * (h - horizon);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Arxa Fonda 3D Fırlanan Qlobus (Səhnə 3 və 5-də daha parlaq)
+      const gx = w / 2 + mouseOffsetX * 30;
+      const gy = h * 0.44 + mouseOffsetY * 20;
+      const R = stageMode === 3 ? 230 : 185;
+      ctx.strokeStyle = stageMode >= 3 ? 'rgba(244, 63, 94, 0.28)' : 'rgba(56, 189, 248, 0.16)';
+      ctx.lineWidth = 1.3;
+
+      for (let i = 0; i < 8; i++) {
+        const angle = (i * Math.PI) / 8 + rotY;
+        ctx.beginPath();
+        ctx.ellipse(gx, gy, Math.abs(Math.cos(angle)) * R, R, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      for (let lat = -2; lat <= 2; lat++) {
+        const ly = gy + (lat * R) / 3;
+        const lr = Math.sqrt(Math.max(0, R * R - Math.pow((lat * R) / 3, 2)));
+        ctx.beginPath();
+        ctx.ellipse(gx, ly, lr, lr * 0.24, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 3D Hücum Qövsü (Səhnə 3-də Baku SOC-a lazer atışı)
+      if (stageMode >= 3) {
+        const srcX = gx - R * 0.65, srcY = gy - R * 0.35;
+        const dstX = gx + R * 0.35, dstY = gy - R * 0.12;
+        const ctrlX = gx, ctrlY = gy - R * 1.15;
+
+        ctx.strokeStyle = '#f43f5e';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(srcX, srcY);
+        ctx.quadraticCurveTo(ctrlX, ctrlY, dstX, dstY);
+        ctx.stroke();
+
+        const t = pulse % 1;
+        const px = (1 - t) * (1 - t) * srcX + 2 * (1 - t) * t * ctrlX + t * t * dstX;
+        const py = (1 - t) * (1 - t) * srcY + 2 * (1 - t) * t * ctrlY + t * t * dstY;
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      rotY += 0.007;
+      pulse += 0.02;
+      requestAnimationFrame(draw3DWorld);
+    }
+    draw3DWorld();
+
+    // ---------------- KURSOR VƏ KLİK EFFEKTİ ----------------
+    const cursorEl = document.getElementById('real-cursor');
+
+    function spawnRipple(x, y) {
+      const r = document.createElement('div');
+      r.className = 'click-ripple';
+      r.style.left = x + 'px';
+      r.style.top = y + 'px';
+      document.body.appendChild(r);
+      setTimeout(() => r.remove(), 700);
+    }
+
+    function moveCursorTo(elementId, clickAfterMs = 0, onClickCallback = null) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const targetX = rect.left + rect.width * 0.55;
+      const targetY = rect.top + rect.height * 0.55;
+
+      cursorEl.style.left = targetX + 'px';
+      cursorEl.style.top = targetY + 'px';
+
+      if (clickAfterMs > 0) {
+        setTimeout(() => {
+          cursorEl.classList.add('clicking');
+          spawnRipple(targetX, targetY);
+          if (onClickCallback) onClickCallback();
+          setTimeout(() => cursorEl.classList.remove('clicking'), 220);
+        }, clickAfterMs);
+      }
+    }
+
+    // Canlı Yazı Effekti
+    function typeUrlText(text, targetId) {
+      const el = document.getElementById(targetId);
+      let i = 0;
+      el.innerHTML = '<span class="typing-caret"></span>';
+      const iv = setInterval(() => {
+        if (i < text.length) {
+          el.innerHTML = text.slice(0, i + 1) + '<span class="typing-caret"></span>';
+          i++;
+        } else {
+          clearInterval(iv);
+        }
+      }, 38);
+    }
+
+    // Risk Balını 0%-dən 99%-ə qaldıran sayğac
+    function animateRiskScore(targetVal) {
+      const el = document.getElementById('score-counter');
+      let cur = 0;
+      const iv = setInterval(() => {
+        cur += 3;
+        if (cur >= targetVal) {
+          cur = targetVal;
+          clearInterval(iv);
+        }
+        el.innerText = cur + '% (BLOKLANDI)';
+        el.style.color = cur >= 60 ? '#f43f5e' : '#38bdf8';
+      }, 25);
+    }
+
+    // ---------------- 5 SƏHNƏLİK 3D KAMERA SSENARİSİ ----------------
+    const cameraRig = document.getElementById('camera-rig');
+    let baseCameraTransform = 'translate3d(0px, 0px, -40px) rotateY(0deg) rotateX(4deg)';
+
+    document.addEventListener('mousemove', (e) => {
+      mouseOffsetX = (e.clientX / window.innerWidth - 0.5);
+      mouseOffsetY = (e.clientY / window.innerHeight - 0.5);
+      cameraRig.style.transform = `${baseCameraTransform} rotateY(${mouseOffsetX * 6}deg) rotateX(${-mouseOffsetY * 5}deg)`;
+    });
+
+    const timeline = [
+      {
+        stage: 1,
+        badge: 'SƏHNƏ 1 / 5 • İSTİFADƏÇİ SORĞUSU VƏ KLİK',
+        cam: 'translate3d(390px, -5px, 210px) rotateY(-20deg) rotateX(2deg)',
+        focusId: 'card-1',
+        danger: false,
+        sub: '1. Kursor giriş xanasına gəlir, saxta "http://kapitaIbank-bonus.xyz" linkini yazır və "Skan Et" düyməsinə klikləyir.',
+        run: () => {
+          document.getElementById('target-scan-btn').classList.remove('pressed');
+          setTimeout(() => {
+            moveCursorTo('typed-url', 450, () => typeUrlText('http://kapitaIbank-bonus.xyz', 'typed-url'));
+          }, 400);
+          setTimeout(() => {
+            moveCursorTo('target-scan-btn', 850, () => {
+              document.getElementById('target-scan-btn').classList.add('pressed');
+            });
+          }, 2300);
+        }
+      },
+      {
+        stage: 2,
+        badge: 'SƏHNƏ 2 / 5 • PYTHON BACKEND DƏRİN ANALİZ (2 ms)',
+        cam: 'translate3d(135px, 10px, 185px) rotateY(-6deg) rotateX(2deg)',
+        focusId: 'card-2',
+        danger: false,
+        sub: '2. Kamera 2-ci 3D modula keçir: lazer skaner işə düşür, böyük "I" vs kiçik "l" (HOMO-01) və brend təqlidi (BRAND-01) aşkarlanır.',
+        run: () => {
+          const box2 = document.getElementById('box-2');
+          box2.classList.add('scanning');
+          setTimeout(() => moveCursorTo('box-2', 500), 450);
+          setTimeout(() => {
+            box2.innerHTML =
+              '<div class="scan-laser"></div>' +
+              '<span style="color:#f43f5e">✔ HOMO-01:</span> I vs l (+40 bal)<br/>' +
+              '<span style="color:#f43f5e">✔ BRAND-01:</span> Kapital Bank (+42)<br/>' +
+              '<span style="color:#fbbf24">✔ TLD-01:</span> .xyz zonası (+22)';
+          }, 1400);
+        }
+      },
+      {
+        stage: 3,
+        badge: 'SƏHNƏ 3 / 5 • 3D QLOBUS & BAKU SOC TELEMETRİYASI',
+        cam: 'translate3d(-135px, 10px, 185px) rotateY(6deg) rotateX(2deg)',
+        focusId: 'card-3',
+        danger: false,
+        sub: '3. Hücumun mənbə IP ünvanı (185.220.101.44) arxadakı 3D qlobus üzərində Baku SOC qovşağına bağlanır və klik sayğacı +1 artır.',
+        run: () => {
+          document.getElementById('box-2').classList.remove('scanning');
+          setTimeout(() => moveCursorTo('box-3', 500), 450);
+          document.getElementById('box-3').innerHTML =
+            'Relay IP: <span style="color:#fda4af">185.220.101.44</span><br/>' +
+            'Hədəf: <span style="color:#38bdf8">BAKU SOC (.AZ)</span><br/>' +
+            'Klik Sayğacı: <b style="color:#fde047">1 dəfə (Canlı)</b>';
+        }
+      },
+      {
+        stage: 4,
+        badge: 'SƏHNƏ 4 / 5 • YEKUN NƏTİCƏ: 99% KRİTİK TƏHLÜKƏ',
+        cam: 'translate3d(-390px, -5px, 210px) rotateY(20deg) rotateX(2deg)',
+        focusId: 'card-4',
+        danger: true,
+        sub: '4. Yekun nəticə 99% KRİTİK TƏHLÜKƏ çıxır: Firewall EDL siyahısı yenilənir və Telegram SOC Bota 1 saniyədə bloklama xəbərdarlığı gedir!',
+        run: () => {
+          setTimeout(() => moveCursorTo('card-4', 500), 450);
+          document.getElementById('box-4').innerHTML =
+            'Risk Balı: <b id="score-counter" style="font-size:15px;">0%</b><br/>' +
+            '<span style="color:#34d399">✔ Firewall EDL:</span> IP Bloklandı<br/>' +
+            '<span style="color:#38bdf8">✔ STIX 2.1 & Bot:</span> Göndərildi';
+          animateRiskScore(99);
+        }
+      },
+      {
+        stage: 5,
+        badge: 'SƏHNƏ 5 / 5 • BUNU ETSƏK NƏ OLAR? (ÜMUMİ PANORAMA)',
+        cam: 'translate3d(0px, 0px, -20px) rotateY(0deg) rotateX(6deg)',
+        focusId: 'all',
+        danger: false,
+        sub: '5. Kamera ümumi 3D panoramaya çəkilir: bütün bank və dövlət qurumları 100% offline (Air-Gapped) qorunur, təkrar hücumlar 2 ms-də bloklanır!',
+        run: () => {
+          document.querySelectorAll('.holo-card').forEach(c => c.classList.add('focused'));
+          moveCursorTo('hud-btns', 0);
+        }
+      }
+    ];
+
+    let tourInterval = null;
+
+    function start3DPresentation() {
+      clearInterval(tourInterval);
+      let idx = 0;
+
+      function playStep(i) {
+        const step = timeline[i];
+        stageMode = step.stage;
+        baseCameraTransform = step.cam;
+        cameraRig.style.transform = baseCameraTransform;
+
+        document.getElementById('scene-badge').innerText = step.badge;
+        document.getElementById('sub-caption').innerText = step.sub;
+        document.getElementById('timeline-bar').style.width = (((i + 1) / timeline.length) * 100) + '%';
+
+        document.querySelectorAll('.holo-card').forEach(c => {
+          c.classList.remove('focused', 'focused-danger');
+        });
+
+        if (step.focusId !== 'all') {
+          const card = document.getElementById(step.focusId);
+          card.classList.add(step.danger ? 'focused-danger' : 'focused');
+        }
+        step.run();
+      }
+
+      playStep(0);
+      tourInterval = setInterval(() => {
+        idx++;
+        if (idx >= timeline.length) {
+          clearInterval(tourInterval);
+          return;
+        }
+        playStep(idx);
+      }, 5400);
+    }
+
+    function toggleHud() {
+      document.getElementById('hud-btns').classList.toggle('hidden-hud');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'h') toggleHud();
+    });
+  </script>
+</body>
+</html>

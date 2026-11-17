@@ -12,32 +12,32 @@
       background-image: radial-gradient(circle at 50% 0%, #131d33 0%, #090d16 65%);
       color: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
       -webkit-font-smoothing: antialiased;
     }
     .font-mono { font-family: 'Consolas', 'Courier New', monospace !important; }
     .siem-card {
       background: linear-gradient(180deg, rgba(17, 24, 39, 0.94) 0%, rgba(12, 18, 30, 0.97) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.16);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
     }
     .siem-pill {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(71, 85, 105, 0.5);
-      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      color: #e2e8f0;
     }
     .tab-pill {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(71, 85, 105, 0.45);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(71, 85, 105, 0.6);
       color: #94a3b8;
     }
     .tab-pill:hover { color: #ffffff; border-color: #38bdf8; }
     .tab-pill-active {
-      background: linear-gradient(90deg, rgba(37, 99, 235, 0.35), rgba(14, 165, 233, 0.35)) !important;
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(14, 165, 233, 0.45)) !important;
       border: 1px solid #38bdf8 !important;
       color: #ffffff !important;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
     }
     @media print {
       body { background: #ffffff !important; color: #000000 !important; }
@@ -49,66 +49,66 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- TOP NAVIGATION BAR -->
-  <nav class="border-b border-slate-800/90 bg-[#0b101d]/95 sticky top-0 z-40 px-4 sm:px-6 py-2.5">
-    <div class="max-w-[1560px] mx-auto flex flex-wrap items-center justify-between gap-3">
+  <nav class="border-b border-slate-800 bg-[#0b101d]/95 sticky top-0 z-40 px-4 sm:px-6 py-3">
+    <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-5">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-blue-600/25 border border-blue-400/50 flex items-center justify-center text-blue-400 font-black">🛡️</div>
-          <span class="font-extrabold text-base tracking-tight text-white">AzShield<span class="text-sky-400">IQ</span> <span class="text-[11px] font-mono text-emerald-400">v6.1</span></span>
+          <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/60 flex items-center justify-center text-blue-400 font-black">🛡️</div>
+          <span class="font-black text-base tracking-tight text-white">AzShield<span class="text-sky-400">IQ</span> <span class="text-[11px] font-mono text-emerald-400">v6.1</span></span>
         </div>
 
-        <button type="button" id="osint-toggle-btn" onclick="toggleOsintMode()" class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 font-mono text-xs font-extrabold transition no-print">
+        <button type="button" id="osint-toggle-btn" onclick="toggleOsintMode()" class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/60 text-emerald-200 font-mono text-xs font-black transition no-print">
           🌐 Local-First + OSINT: AKTİV
         </button>
       </div>
 
       <div class="flex flex-wrap items-center gap-2 no-print">
-        <span id="top-status-pill" class="px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-slate-700 font-mono text-xs font-extrabold">● SİSTEM HAZIRDIR</span>
-        <button type="button" onclick="runBenchmark()" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/50 text-xs font-mono font-extrabold transition">
+        <span id="top-status-pill" class="px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-slate-700 font-mono text-xs font-black">● SİSTEM HAZIRDIR</span>
+        <button type="button" onclick="runBenchmark()" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/60 text-xs font-mono font-black transition">
           📊 Model Metrikaları (F1 / FPR)
         </button>
-        <button type="button" onclick="downloadIOC('stix')" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 text-xs font-mono font-extrabold transition">
+        <button type="button" onclick="downloadIOC('stix')" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 text-xs font-mono font-black transition">
           ⬇️ STIX 2.1 IOC
         </button>
-        <button type="button" onclick="downloadIOC('edl')" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/50 text-xs font-mono font-extrabold transition">
+        <button type="button" onclick="downloadIOC('edl')" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/60 text-xs font-mono font-black transition">
           🧱 Firewall EDL
         </button>
-        <button type="button" onclick="resetMLMemory()" class="px-2.5 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/35 text-purple-200 border border-purple-400/40 text-xs font-mono font-bold transition">
+        <button type="button" onclick="resetMLMemory()" class="px-2.5 py-1.5 rounded-lg bg-purple-600/25 hover:bg-purple-600/40 text-purple-200 border border-purple-400/50 text-xs font-mono font-black transition">
           🧠 ML Sıfırla
         </button>
-        <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold transition">
+        <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-black transition">
           📄 PDF
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- BENCHMARK MODAL / PANEL -->
-  <div id="benchmark-panel" class="hidden max-w-[1560px] w-full mx-auto px-4 sm:px-6 pt-4 no-print">
-    <div class="siem-card rounded-xl p-4 border-2 border-amber-400/60">
+  <!-- BENCHMARK PANEL -->
+  <div id="benchmark-panel" class="hidden max-w-[1720px] w-full mx-auto px-4 sm:px-6 pt-4 no-print">
+    <div class="siem-card rounded-xl p-4 border-2 border-amber-400/80">
       <div class="flex items-center justify-between mb-3">
         <div>
-          <span class="text-sm font-extrabold text-amber-300">📊 AZSHIELD AI v6.1 — DEV / HOLDOUT BENCHMARK & HƏDD KALİBRASİYASI</span>
+          <span class="text-sm font-black text-amber-300">📊 AZSHIELD AI v6.1 — DEV / HOLDOUT BENCHMARK & HƏDD KALİBRASİYASI</span>
           <span class="ml-2 text-xs font-mono text-slate-300">(n=30: Dev=16, Unseen Adversarial Holdout=14)</span>
         </div>
-        <button type="button" onclick="document.getElementById('benchmark-panel').classList.add('hidden')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold">✕ Bağla</button>
+        <button type="button" onclick="document.getElementById('benchmark-panel').classList.add('hidden')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-200 text-xs font-bold">✕ Bağla</button>
       </div>
       <div id="benchmark-content" class="grid grid-cols-2 sm:grid-cols-6 gap-3 text-center font-mono"></div>
     </div>
   </div>
 
-  <!-- MAIN DASHBOARD CONTAINER -->
-  <main class="flex-1 max-w-[1560px] w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
 
-    <div id="file-protocol-warning" class="hidden rounded-xl p-3 bg-rose-950 border border-rose-500 text-rose-100 text-xs font-extrabold">
+    <div id="file-protocol-warning" class="hidden rounded-xl p-3 bg-rose-950 border border-rose-500 text-rose-100 text-xs font-black">
       ⚠️ DİQQƏT: Səhifəni qovluqdan birbaşa (file:///) açmısınız. Brauzerdə <span class="underline text-amber-300 font-mono">http://127.0.0.1:8000</span> ünvanını açın.
     </div>
 
     <!-- SUB-HEADER -->
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <h1 class="text-lg font-extrabold text-white">Threat Intelligence & Local-First SOC</h1>
-        <span class="hidden sm:inline-block text-xs font-mono text-slate-400">Deep SSRF Guard • 3D Relay Globe • Click Telemetry</span>
+        <h1 class="text-lg font-black text-white">Threat Intelligence & Local-First SOC</h1>
+        <span class="hidden sm:inline-block text-xs font-mono text-slate-300 font-bold">Deep SSRF Guard • 3D Relay Globe • Click Telemetry</span>
       </div>
       <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
         <span class="siem-pill px-3 py-1 rounded-lg">Sector: <b class="text-white">Azerbaijan (.AZ)</b></span>
@@ -117,170 +117,169 @@
       </div>
     </div>
 
-    <!-- TOP 6 KPI CARDS STRIP (INCLUDES PROMINENT CLICK COUNTER!) -->
+    <!-- TOP 6 KPI CARDS -->
     <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <div class="siem-card rounded-xl p-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-400 text-base shrink-0">🛡️</div>
+        <div class="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 text-base shrink-0">🛡️</div>
         <div>
           <div id="kpi-total-threats" class="text-lg font-black text-white leading-tight">12,345</div>
-          <div class="text-[11px] text-slate-400 font-bold">Total Blocked</div>
+          <div class="text-[11px] text-slate-300 font-black">Total Blocked</div>
         </div>
       </div>
 
       <div class="siem-card rounded-xl p-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-400/30 flex items-center justify-center text-rose-400 text-base shrink-0">☣️</div>
+        <div class="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-400 text-base shrink-0">☣️</div>
         <div>
           <div id="kpi-risk-score" class="text-lg font-black text-white leading-tight">--%</div>
-          <div class="text-[11px] text-slate-400 font-bold">Active Risk Score</div>
+          <div class="text-[11px] text-slate-300 font-black">Active Risk Score</div>
         </div>
       </div>
 
       <div class="siem-card rounded-xl p-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center text-indigo-400 text-base shrink-0">🧪</div>
+        <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400 text-base shrink-0">🧪</div>
         <div>
           <div id="kpi-sandbox-score" class="text-lg font-black text-white leading-tight">--%</div>
-          <div class="text-[11px] text-slate-400 font-bold">Behavior Score</div>
+          <div class="text-[11px] text-slate-300 font-black">Behavior Score</div>
         </div>
       </div>
 
-      <!-- NEW PROMINENT CLICK COUNTER KPI -->
-      <div class="siem-card rounded-xl p-3 flex items-center gap-3 border-amber-400/30">
-        <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-300 text-base shrink-0">🖱️</div>
+      <div class="siem-card rounded-xl p-3 flex items-center gap-3 border-amber-400/40">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-base shrink-0">🖱️</div>
         <div>
           <div id="kpi-click-count" class="text-lg font-black text-amber-300 leading-tight">0 dəfə</div>
-          <div class="text-[11px] text-slate-300 font-bold">Klik / Skan Sayı</div>
+          <div class="text-[11px] text-slate-200 font-black">Klik / Skan Sayı</div>
         </div>
       </div>
 
       <div class="siem-card rounded-xl p-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-400/30 flex items-center justify-center text-purple-400 text-base shrink-0">🧠</div>
+        <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-400 text-base shrink-0">🧠</div>
         <div>
           <div id="kpi-ml-count" class="text-lg font-black text-purple-300 leading-tight">0</div>
-          <div class="text-[11px] text-slate-400 font-bold">Verified ML DB</div>
+          <div class="text-[11px] text-slate-300 font-black">Verified ML DB</div>
         </div>
       </div>
 
       <div class="siem-card rounded-xl p-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center text-cyan-400 text-base shrink-0">🌐</div>
+        <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-base shrink-0">🌐</div>
         <div class="min-w-0">
           <div id="kpi-detected-ip" class="text-xs font-mono font-black text-sky-300 truncate">185.220.101.44</div>
-          <div class="text-[11px] text-slate-400 font-bold">Source Relay IP</div>
+          <div class="text-[11px] text-slate-300 font-black">Source Relay IP</div>
         </div>
       </div>
     </section>
 
-    <!-- INTEGRATED 1-CLICK OMNI-SCANNER BAR -->
+    <!-- OMNI-SCANNER BAR -->
     <section class="siem-card rounded-xl p-3.5 no-print">
       <div class="flex flex-col lg:flex-row lg:items-center gap-3">
         <div class="grid grid-cols-4 gap-1.5 shrink-0">
-          <button type="button" onclick="switchTab('url')" id="tab-url" class="tab-pill tab-pill-active px-3 py-2 rounded-lg text-xs font-extrabold transition">🌐 URL & SSRF</button>
-          <button type="button" onclick="switchTab('email')" id="tab-email" class="tab-pill px-3 py-2 rounded-lg text-xs font-extrabold transition">📧 Gmail SMTP</button>
-          <button type="button" onclick="switchTab('text')" id="tab-text" class="tab-pill px-3 py-2 rounded-lg text-xs font-extrabold transition">🧠 AZ NLP SMS</button>
-          <button type="button" onclick="switchTab('apk')" id="tab-apk" class="tab-pill px-3 py-2 rounded-lg text-xs font-extrabold transition">📱 APK Sandbox</button>
+          <button type="button" onclick="switchTab('url')" id="tab-url" class="tab-pill tab-pill-active px-3 py-2 rounded-lg text-xs font-black transition">🌐 URL & SSRF</button>
+          <button type="button" onclick="switchTab('email')" id="tab-email" class="tab-pill px-3 py-2 rounded-lg text-xs font-black transition">📧 Gmail SMTP</button>
+          <button type="button" onclick="switchTab('text')" id="tab-text" class="tab-pill px-3 py-2 rounded-lg text-xs font-black transition">🧠 AZ NLP SMS</button>
+          <button type="button" onclick="switchTab('apk')" id="tab-apk" class="tab-pill px-3 py-2 rounded-lg text-xs font-black transition">📱 APK Sandbox</button>
         </div>
 
         <!-- URL Panel -->
         <div id="panel-url" class="flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
-          <input id="url-input" type="text" value="http://kapitaIbank-bonus.xyz/verify?uid=victim_994" placeholder="URL və ya IP daxil edin..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-sky-400" />
-          <button type="button" onclick="fillUrl('http://kapitaIbank-bonus.xyz/verify?uid=victim_994')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/40 text-xs font-bold shrink-0">⚡ Homoglyph URL</button>
-          <button type="button" onclick="fillUrl('http://2130706433/admin')" class="px-2.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-bold shrink-0">🛡️ SSRF Test</button>
-          <button type="button" onclick="fillUrl('https://kapitalbank.az')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/40 text-xs font-bold shrink-0">✓ Rəsmi</button>
-          <button type="button" onclick="analyzeUrl()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-extrabold text-xs transition shrink-0 cursor-pointer">Skan Et ➤</button>
+          <input id="url-input" type="text" value="http://kapitaIbank-bonus.xyz/verify?uid=victim_994" placeholder="URL və ya IP daxil edin..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-black text-white focus:outline-none focus:border-sky-400" />
+          <button type="button" onclick="fillUrl('http://kapitaIbank-bonus.xyz/verify?uid=victim_994')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Homoglyph URL</button>
+          <button type="button" onclick="fillUrl('http://2130706433/admin')" class="px-2.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/50 text-xs font-black shrink-0">🛡️ SSRF Test</button>
+          <button type="button" onclick="fillUrl('https://kapitalbank.az')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/50 text-xs font-black shrink-0">✓ Rəsmi</button>
+          <button type="button" onclick="analyzeUrl()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">Skan Et ➤</button>
         </div>
 
         <!-- Email Panel -->
         <div id="panel-email" class="hidden flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
-          <textarea id="email-input" rows="1" placeholder="Gmail SMTP headerlərini yapışdırın..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:border-sky-400"></textarea>
-          <button type="button" onclick="fillSpoofEmail()" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/40 text-xs font-bold shrink-0">⚡ Saxta SMTP</button>
-          <button type="button" onclick="fillCleanEmail()" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/40 text-xs font-bold shrink-0">✓ Təmiz</button>
-          <button type="button" onclick="analyzeEmail()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-extrabold text-xs transition shrink-0 cursor-pointer">SMTP & ML ➤</button>
+          <textarea id="email-input" rows="1" placeholder="Gmail SMTP headerlərini yapışdırın..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-black text-white focus:outline-none focus:border-sky-400"></textarea>
+          <button type="button" onclick="fillSpoofEmail()" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Saxta SMTP</button>
+          <button type="button" onclick="fillCleanEmail()" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/50 text-xs font-black shrink-0">✓ Təmiz</button>
+          <button type="button" onclick="analyzeEmail()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">SMTP & ML ➤</button>
         </div>
 
         <!-- SMS Panel -->
         <div id="panel-text" class="hidden flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
-          <textarea id="text-input" rows="1" placeholder="Şübhəli SMS / WhatsApp mesajını yazın..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-sky-400"></textarea>
-          <button type="button" onclick="fillText('HORMETLI MUSTERI! Kapital Bank hesabınıza 450 AZN dovlet kompensasiyasi kocurulub. 24 saat erzinde tesdiqlemeseniz kartiniz bloklanacaq. Kart melumatlari ve SMS kodu daxil edin: http://abb-yardim.online')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/40 text-xs font-bold shrink-0">⚡ Scam SMS</button>
-          <button type="button" onclick="fillText('Birbank tesdiq kodu: 482910. Tehlukesizlik ucun OTP kodunu hec kime vermeyin, bank emekdaslari sizden kod istemir.')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/40 text-xs font-bold shrink-0">✓ Real Bank OTP (FP Test)</button>
-          <button type="button" onclick="analyzeText()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-extrabold text-xs transition shrink-0 cursor-pointer">NLP Analiz ➤</button>
+          <textarea id="text-input" rows="1" placeholder="Şübhəli SMS / WhatsApp mesajını yazın..." class="flex-1 min-w-[200px] bg-[#070b13] border border-slate-700 rounded-lg px-3 py-2 text-xs font-black text-white focus:outline-none focus:border-sky-400"></textarea>
+          <button type="button" onclick="fillText('HORMETLI MUSTERI! Kapital Bank hesabınıza 450 AZN dovlet kompensasiyasi kocurulub. 24 saat erzinde tesdiqlemeseniz kartiniz bloklanacaq. Kart melumatlari ve SMS kodu daxil edin: http://abb-yardim.online')" class="px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 text-xs font-black shrink-0">⚡ Scam SMS</button>
+          <button type="button" onclick="fillText('Birbank tesdiq kodu: 482910. Tehlukesizlik ucun OTP kodunu hec kime vermeyin, bank emekdaslari sizden kod istemir.')" class="px-2.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/50 text-xs font-black shrink-0">✓ Real Bank OTP</button>
+          <button type="button" onclick="analyzeText()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">NLP Analiz ➤</button>
         </div>
 
         <!-- APK Panel -->
         <div id="panel-apk" class="hidden flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2">
-          <input id="apk-input" type="file" accept=".apk,.zip" class="flex-1 text-xs font-bold text-white bg-[#070b13] border border-slate-700 rounded-lg p-1.5 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-extrabold file:bg-blue-600 file:text-white cursor-pointer" />
-          <button type="button" onclick="analyzeApk()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-extrabold text-xs transition shrink-0 cursor-pointer">APK Sandbox ➤</button>
+          <input id="apk-input" type="file" accept=".apk,.zip" class="flex-1 text-xs font-black text-white bg-[#070b13] border border-slate-700 rounded-lg p-1.5 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white cursor-pointer" />
+          <button type="button" onclick="analyzeApk()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-xs transition shrink-0 cursor-pointer">APK Sandbox ➤</button>
         </div>
       </div>
     </section>
 
-    <!-- HUMAN-IN-THE-LOOP ANALYST FEEDBACK BAR -->
-    <div id="analyst-feedback-bar" class="hidden siem-card rounded-xl p-3 border border-purple-400/50 flex flex-wrap items-center justify-between gap-3 no-print">
+    <!-- ANALYST FEEDBACK BAR -->
+    <div id="analyst-feedback-bar" class="hidden siem-card rounded-xl p-3 border border-purple-400/60 flex flex-wrap items-center justify-between gap-3 no-print">
       <div class="flex items-center gap-2 text-xs">
         <span class="text-lg">🧑‍💻</span>
-        <span class="font-extrabold text-purple-200">Human-in-the-Loop ML (Token Auth):</span>
-        <span id="feedback-status-txt" class="text-slate-300 font-bold">Data poisoning qarşısını almaq üçün analitik təsdiqi ilə ML yaddaşına yazın:</span>
+        <span class="font-black text-purple-200">Human-in-the-Loop ML (Token Auth):</span>
+        <span id="feedback-status-txt" class="text-slate-300 font-black">Data poisoning qarşısını almaq üçün analitik təsdiqi ilə ML yaddaşına yazın:</span>
       </div>
       <div class="flex items-center gap-2">
-        <button type="button" onclick="submitAnalystFeedback(true)" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold transition">
+        <button type="button" onclick="submitAnalystFeedback(true)" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition">
           ✅ Təhlükəni Təsdiqlə (ML-ə Öyrət)
         </button>
-        <button type="button" onclick="submitAnalystFeedback(false)" class="px-3.5 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-extrabold transition">
+        <button type="button" onclick="submitAnalystFeedback(false)" class="px-3.5 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-black transition">
           ❌ Yanlış Pozitiv (Yaddaşdan Sil)
         </button>
       </div>
     </div>
 
-    <!-- MAIN 3-COLUMN ENTERPRISE SIEM GRID -->
-    <section id="threat-map-box" class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+    <!-- MAIN SIEM GRID (STABLE 3 COLUMNS) -->
+    <section id="threat-map-box" class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
 
-      <!-- LEFT COLUMN (3 Cols) -->
-      <div class="lg:col-span-3 flex flex-col justify-between gap-4">
-        <div class="siem-card rounded-xl p-4 flex-1 flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-extrabold text-slate-200">Threat Distribution by Vector</span>
-            <span class="text-[10px] font-mono text-sky-400">5-AXIS</span>
+      <!-- LEFT COLUMN (4 Cols) -->
+      <div class="xl:col-span-4 flex flex-col gap-4">
+        <div class="siem-card rounded-xl p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black text-slate-200">Threat Distribution by Vector</span>
+            <span class="text-[10px] font-mono text-sky-400 font-black">5-AXIS</span>
           </div>
-          <div class="h-56 flex items-center justify-center"><canvas id="radarChart"></canvas></div>
-          <div class="grid grid-cols-2 gap-1.5 text-[11px] font-mono text-slate-300 pt-2 border-t border-slate-800/80">
+          <div class="h-64 flex items-center justify-center"><canvas id="radarChart"></canvas></div>
+          <div class="grid grid-cols-2 gap-1.5 text-[11px] font-mono text-slate-300 pt-3 border-t border-slate-800/80 mt-2">
             <div>● Critical: <b id="lbl-crit" class="text-rose-400">0%</b></div>
             <div>● High: <b id="lbl-high" class="text-amber-400">0%</b></div>
           </div>
         </div>
 
-        <div class="siem-card rounded-xl p-4 flex-1 flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-extrabold text-slate-200">Illustrative Engine Consensus</span>
-            <span class="text-[10px] font-mono text-amber-400">SIMULATED</span>
+        <div class="siem-card rounded-xl p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black text-slate-200">Illustrative Engine Consensus</span>
+            <span class="text-[10px] font-mono text-amber-400 font-black">SIMULATED</span>
           </div>
-          <div class="relative h-48 flex items-center justify-center">
+          <div class="relative h-52 flex items-center justify-center">
             <canvas id="consensusChart"></canvas>
-            <div class="absolute text-center pointer-events-none pb-4">
-              <div id="ring-center-score" class="text-xl font-black text-white">--%</div>
-              <div class="text-[10px] font-mono text-slate-400">Risk</div>
+            <div class="absolute text-center pointer-events-none pb-5">
+              <div id="ring-center-score" class="text-2xl font-black text-white">--%</div>
+              <div class="text-[10px] font-mono text-slate-400 font-bold">Risk</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- CENTER COLUMN (6 Cols): 3D SPINNING CYBER GLOBE + RELAY TELEMETRY -->
-      <div class="lg:col-span-6 siem-card rounded-xl p-4 flex flex-col justify-between space-y-3">
+      <!-- CENTER COLUMN (5 Cols): 3D SPINNING CYBER GLOBE -->
+      <div class="xl:col-span-5 siem-card rounded-xl p-4 flex flex-col justify-between space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            <span class="text-sm font-extrabold text-white">3D Global Threat Globe & Relay IP</span>
-            <span id="map-live-ip-badge" class="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/40 text-sky-300 font-mono text-[11px] font-bold">Relay: 185.220.101.44 → Baku</span>
+            <span class="text-sm font-black text-white">3D Global Threat Globe & Relay IP</span>
+            <span id="map-live-ip-badge" class="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/40 text-sky-300 font-mono text-[11px] font-black">Relay: 185.220.101.44 → Baku</span>
           </div>
           <div class="flex items-center gap-2">
-            <span id="globe-click-badge" class="px-2.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-200 font-mono text-[11px] font-extrabold">🖱️ Klik: 0 dəfə</span>
-            <span id="latency-pill" class="text-[11px] font-mono text-slate-400">12ms</span>
+            <span id="globe-click-badge" class="px-2.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-200 font-mono text-[11px] font-black">🖱️ Klik: 0 dəfə</span>
+            <span id="latency-pill" class="text-[11px] font-mono text-slate-400 font-bold">12ms</span>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div class="bg-[#080c15] border border-slate-800/90 rounded-lg p-3">
-            <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-300 mb-2 pb-1.5 border-b border-slate-800">
+            <div class="flex items-center justify-between text-[11px] font-black text-slate-300 mb-2 pb-1.5 border-b border-slate-800">
               <span>Live Attacks & Source Relays</span>
               <span class="text-sky-400 font-mono">RELAY IP → .AZ</span>
             </div>
-            <div id="attack-feed-list" class="space-y-2 text-[11px] font-mono">
+            <div id="attack-feed-list" class="space-y-2 text-[11px] font-mono font-bold">
               <div class="flex items-center justify-between text-slate-200">
                 <span class="truncate"><span class="text-rose-400">●</span> Homoglyph Phishing</span>
                 <span class="text-amber-300 shrink-0">185.220.101.44 → .AZ</span>
@@ -301,22 +300,22 @@
           </div>
 
           <div class="bg-[#080c15] border border-slate-800/90 rounded-lg p-3">
-            <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-300 mb-2 pb-1.5 border-b border-slate-800">
+            <div class="flex items-center justify-between text-[11px] font-black text-slate-300 mb-2 pb-1.5 border-b border-slate-800">
               <span>Protected .AZ Sectors</span>
               <span class="text-emerald-400 font-mono">SHIELDED</span>
             </div>
-            <div class="space-y-2 text-[11px] font-mono">
-              <div class="flex items-center justify-between"><span class="text-slate-200 font-bold">Kapital Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">42 blocked</span></div>
-              <div class="flex items-center justify-between"><span class="text-slate-200 font-bold">ABB Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">31 blocked</span></div>
-              <div class="flex items-center justify-between"><span class="text-slate-200 font-bold">myGov Portal (.gov.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">27 blocked</span></div>
-              <div class="flex items-center justify-between"><span class="text-slate-200 font-bold">Pasha Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">19 blocked</span></div>
+            <div class="space-y-2 text-[11px] font-mono font-bold">
+              <div class="flex items-center justify-between"><span class="text-slate-200">Kapital Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">42 blocked</span></div>
+              <div class="flex items-center justify-between"><span class="text-slate-200">ABB Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">31 blocked</span></div>
+              <div class="flex items-center justify-between"><span class="text-slate-200">myGov Portal (.gov.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">27 blocked</span></div>
+              <div class="flex items-center justify-between"><span class="text-slate-200">Pasha Bank (.az)</span><span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">19 blocked</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 3D SPINNING GLOBE CANVAS -->
+        <!-- 3D GLOBE CANVAS -->
         <div class="relative bg-[#060a12] border border-slate-800/90 rounded-lg p-2 flex flex-col items-center justify-center overflow-hidden">
-          <canvas id="cyberGlobe3D" width="640" height="275" class="w-full h-auto"></canvas>
+          <canvas id="cyberGlobe3D" width="640" height="290" class="w-full h-auto"></canvas>
           <div class="w-full flex items-center justify-center gap-6 text-[11px] font-mono text-slate-300 pt-1.5 border-t border-slate-800/70">
             <span><b class="text-rose-500">●</b> Attacker Relay IP</span>
             <span><b class="text-amber-400">●</b> Phishing Vector</span>
@@ -326,25 +325,25 @@
       </div>
 
       <!-- RIGHT COLUMN (3 Cols) -->
-      <div class="lg:col-span-3 flex flex-col justify-between gap-4">
+      <div class="xl:col-span-3 flex flex-col justify-between gap-4">
         <div class="siem-card rounded-xl p-4">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-extrabold text-slate-200">Threat Trends Over Time</span>
-            <span class="text-[10px] font-mono text-rose-400">LIVE</span>
+            <span class="text-xs font-black text-slate-200">Threat Trends Over Time</span>
+            <span class="text-[10px] font-mono text-rose-400 font-black">LIVE</span>
           </div>
-          <div class="h-32"><canvas id="trendLineChart"></canvas></div>
+          <div class="h-36"><canvas id="trendLineChart"></canvas></div>
         </div>
 
         <div class="siem-card rounded-xl p-4">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-extrabold text-slate-200">Static vs. Behavior Inference</span>
-            <span class="text-[10px] font-mono text-sky-400">SCORE %</span>
+            <span class="text-xs font-black text-slate-200">Static vs. Behavior Inference</span>
+            <span class="text-[10px] font-mono text-sky-400 font-black">SCORE %</span>
           </div>
-          <div class="h-32"><canvas id="barChart"></canvas></div>
+          <div class="h-36"><canvas id="barChart"></canvas></div>
         </div>
 
         <div class="siem-card rounded-xl p-4">
-          <div class="text-xs font-extrabold text-slate-200 mb-3">Engine Telemetry Gauges</div>
+          <div class="text-xs font-black text-slate-200 mb-3">Engine Telemetry Gauges</div>
           <div class="grid grid-cols-4 gap-2 text-center">
             <div>
               <div class="relative w-14 h-14 mx-auto flex items-center justify-center">
@@ -354,7 +353,7 @@
                 </svg>
                 <span id="ring-static-txt" class="absolute text-[11px] font-mono font-black text-white">0%</span>
               </div>
-              <div class="text-[10px] text-slate-400 font-bold mt-1">Statik</div>
+              <div class="text-[10px] text-slate-400 font-black mt-1">Statik</div>
             </div>
 
             <div>
@@ -365,7 +364,7 @@
                 </svg>
                 <span id="ring-dyn-txt" class="absolute text-[11px] font-mono font-black text-white">0%</span>
               </div>
-              <div class="text-[10px] text-slate-400 font-bold mt-1">Behavior</div>
+              <div class="text-[10px] text-slate-400 font-black mt-1">Behavior</div>
             </div>
 
             <div>
@@ -376,7 +375,7 @@
                 </svg>
                 <span id="ring-ml-txt" class="absolute text-[11px] font-mono font-black text-white">0%</span>
               </div>
-              <div class="text-[10px] text-slate-400 font-bold mt-1">ML Match</div>
+              <div class="text-[10px] text-slate-400 font-black mt-1">ML Match</div>
             </div>
 
             <div>
@@ -387,31 +386,31 @@
                 </svg>
                 <span class="absolute text-[11px] font-mono font-black text-emerald-300">92.3%</span>
               </div>
-              <div class="text-[10px] text-slate-400 font-bold mt-1">Holdout F1</div>
+              <div class="text-[10px] text-slate-400 font-black mt-1">Holdout F1</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ADAPTIVE ML FAST-PATH BANNER -->
+    <!-- ML FAST-PATH BANNER -->
     <div id="ml-banner" class="hidden rounded-xl p-4 bg-purple-950/85 border-2 border-purple-400 text-white shadow-lg">
       <div class="flex items-center gap-3">
         <span class="text-2xl">🧠</span>
         <div>
-          <div class="text-sm font-extrabold text-purple-200 uppercase">VERIFIED ML FAST-PATH HIT — TƏKRAR ARAŞDIRMAYA EHTİYAC QALMADI!</div>
+          <div class="text-sm font-black text-purple-200 uppercase">VERIFIED ML FAST-PATH HIT — TƏKRAR ARAŞDIRMAYA EHTİYAC QALMADI!</div>
           <div id="ml-banner-desc" class="text-xs font-bold text-white mt-0.5"></div>
         </div>
       </div>
     </div>
 
-    <!-- XAI PIPELINE + EMULATED BEHAVIOR + SANDBOX PREVIEW -->
+    <!-- FORENSICS SECTION -->
     <section id="forensics-section" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div class="lg:col-span-5 space-y-4">
         <div class="siem-card rounded-xl p-4">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-mono font-extrabold text-sky-400">>_ XAI FORENSIC PIPELINE (NECƏ TAPDI?)</span>
-            <span id="click-badge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-amber-300 border border-slate-700">Status: Hazır</span>
+            <span class="text-xs font-mono font-black text-sky-400">>_ XAI FORENSIC PIPELINE (NECƏ TAPDI?)</span>
+            <span id="click-badge" class="text-xs font-mono font-black px-2 py-0.5 rounded bg-slate-900 text-amber-300 border border-slate-700">Status: Hazır</span>
           </div>
           <div id="engine-logs" class="bg-[#060911] border border-slate-800 rounded-lg p-3.5 font-mono text-xs font-bold text-emerald-300 space-y-1.5 max-h-60 overflow-y-auto">
             <div class="text-slate-200">[READY] AzShield IQ v6.1 aktivdir. Yuxarıdan "Skan Et ➤" düyməsini sıxın...</div>
@@ -420,9 +419,9 @@
 
         <div class="siem-card rounded-xl p-4 space-y-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-mono font-extrabold text-purple-300">🧪 DAVRANIŞ ÇIXARIŞI (EMULATED BEHAVIOR)</span>
+            <span class="text-xs font-mono font-black text-purple-300">🧪 DAVRANIŞ ÇIXARIŞI (EMULATED BEHAVIOR)</span>
             <div id="mitre-tags" class="flex flex-wrap gap-1.5">
-              <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 border border-indigo-400/40">MITRE ATT&CK</span>
+              <span class="text-[11px] font-mono font-black px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 border border-indigo-400/40">MITRE ATT&CK</span>
             </div>
           </div>
           <div id="hybrid-actions-list" class="space-y-1.5 text-xs font-bold text-white">
@@ -433,8 +432,8 @@
 
       <div class="lg:col-span-7 siem-card rounded-xl p-4">
         <div class="flex items-center justify-between mb-2.5">
-          <span class="text-xs font-mono font-extrabold text-sky-400">🖥️ SANDBOX ARTEFAKT VƏ NORMALİZASİYA / SMTP / DEX ÖNİZLƏMƏSİ</span>
-          <span id="result-target" class="text-xs font-mono font-extrabold text-white">Hədəf seçilməyib</span>
+          <span class="text-xs font-mono font-black text-sky-400">🖥️ SANDBOX ARTEFAKT VƏ NORMALİZASİYA / SMTP / DEX ÖNİZLƏMƏSİ</span>
+          <span id="result-target" class="text-xs font-mono font-black text-white">Hədəf seçilməyib</span>
         </div>
         <div id="sandbox-container">
           <div class="rounded-lg border border-slate-800 bg-[#060911] p-4 text-xs font-bold text-slate-300">
@@ -444,13 +443,13 @@
       </div>
     </section>
 
-    <!-- 3 FORENSIC TABLES -->
+    <!-- TABLES SECTION -->
     <section id="tables-section" class="space-y-4">
       <div class="siem-card rounded-xl p-4">
-        <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2.5">🌐 Multi-Engine Threat Intelligence (Local Heuristics + Live URLhaus + Illustrative Feeds)</div>
+        <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-black mb-2.5">🌐 Multi-Engine Threat Intelligence (Local Heuristics + Live URLhaus + Illustrative Feeds)</div>
         <div class="overflow-x-auto rounded-lg border border-slate-800">
           <table class="w-full text-left text-xs">
-            <thead class="bg-[#070b14] text-white font-mono font-extrabold border-b border-slate-800">
+            <thead class="bg-[#070b14] text-white font-mono font-black border-b border-slate-800">
               <tr>
                 <th class="py-2.5 px-3.5">Platforma</th>
                 <th class="py-2.5 px-3.5">Nəticə</th>
@@ -467,10 +466,10 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="siem-card rounded-xl p-4">
-          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2.5">📊 Aşkarlanan Qaydalar və Sübut Matrisi</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-black mb-2.5">📊 Aşkarlanan Qaydalar və Sübut Matrisi</div>
           <div class="overflow-x-auto rounded-lg border border-slate-800">
             <table class="w-full text-left text-xs">
-              <thead class="bg-[#070b14] text-white font-mono font-extrabold border-b border-slate-800">
+              <thead class="bg-[#070b14] text-white font-mono font-black border-b border-slate-800">
                 <tr>
                   <th class="py-2 px-3">ID</th>
                   <th class="py-2 px-3">Kateqoriya</th>
@@ -486,10 +485,10 @@
         </div>
 
         <div class="siem-card rounded-xl p-4">
-          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-extrabold mb-2.5">🛰️ İnfrastruktur, Entropy & Telemetriya</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-black mb-2.5">🛰️ İnfrastruktur, Entropy & Telemetriya</div>
           <div class="overflow-x-auto rounded-lg border border-slate-800">
             <table class="w-full text-left text-xs">
-              <thead class="bg-[#070b14] text-white font-mono font-extrabold border-b border-slate-800">
+              <thead class="bg-[#070b14] text-white font-mono font-black border-b border-slate-800">
                 <tr>
                   <th class="py-2 px-3 w-1/3">Parametr</th>
                   <th class="py-2 px-3">Dəyər</th>
@@ -524,10 +523,10 @@
       onlineOsintMode = !onlineOsintMode;
       const btn = document.getElementById('osint-toggle-btn');
       if (onlineOsintMode) {
-        btn.className = 'px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 font-mono text-xs font-extrabold transition no-print';
+        btn.className = 'px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/60 text-emerald-200 font-mono text-xs font-black transition no-print';
         btn.innerText = '🌐 Local-First + OSINT: AKTİV';
       } else {
-        btn.className = 'px-3 py-1 rounded-lg bg-amber-500/25 border border-amber-400 text-amber-200 font-mono text-xs font-extrabold transition no-print';
+        btn.className = 'px-3 py-1 rounded-lg bg-amber-500/25 border border-amber-400 text-amber-200 font-mono text-xs font-black transition no-print';
         btn.innerText = '✈️ AIR-GAPPED (100% OFFLINE)';
       }
     };
@@ -568,7 +567,7 @@
 
     function setScanningState(label) {
       document.getElementById('top-status-pill').innerText = '⏳ SKAN EDİLİR...';
-      document.getElementById('engine-logs').innerHTML = '<div class="text-sky-300 font-extrabold">[SCANNING] Analiz mühərriki işə salındı (' + label + ')...</div>';
+      document.getElementById('engine-logs').innerHTML = '<div class="text-sky-300 font-black">[SCANNING] Analiz mühərriki işə salındı (' + label + ')...</div>';
     }
 
     async function executeScan(endpoint, fetchOptions, label) {
@@ -585,7 +584,7 @@
       } catch (err) {
         document.getElementById('top-status-pill').innerText = '⚠️ BLOKLANDI / XƏTA';
         document.getElementById('engine-logs').innerHTML =
-          '<div class="text-rose-400 font-extrabold">[XƏTA] ' + err.message + '</div>';
+          '<div class="text-rose-400 font-black">[XƏTA] ' + err.message + '</div>';
       }
     }
 
@@ -624,30 +623,30 @@
       box.innerHTML = `
         <div class="bg-[#080c15] p-3 rounded-lg border border-slate-800">
           <div class="text-xl font-black text-emerald-400">${h.accuracy}%</div>
-          <div class="text-[11px] text-slate-300">Holdout Accuracy</div>
-          <div class="text-[10px] text-slate-400">n=${b.holdout_size} (Unseen)</div>
+          <div class="text-[11px] text-slate-300 font-black">Holdout Accuracy</div>
+          <div class="text-[10px] text-slate-400 font-bold">n=${b.holdout_size} (Unseen)</div>
         </div>
         <div class="bg-[#080c15] p-3 rounded-lg border border-slate-800">
           <div class="text-xl font-black text-sky-400">${h.precision}%</div>
-          <div class="text-[11px] text-slate-300">Precision</div>
+          <div class="text-[11px] text-slate-300 font-black">Precision</div>
         </div>
         <div class="bg-[#080c15] p-3 rounded-lg border border-slate-800">
           <div class="text-xl font-black text-purple-400">${h.recall}%</div>
-          <div class="text-[11px] text-slate-300">Recall</div>
+          <div class="text-[11px] text-slate-300 font-black">Recall</div>
         </div>
         <div class="bg-[#080c15] p-3 rounded-lg border border-slate-800">
           <div class="text-xl font-black text-amber-300">${h.f1}%</div>
-          <div class="text-[11px] text-slate-300">F1-Score (T=60)</div>
+          <div class="text-[11px] text-slate-300 font-black">F1-Score (T=60)</div>
         </div>
         <div class="bg-[#080c15] p-3 rounded-lg border border-slate-800">
           <div class="text-xl font-black text-emerald-300">${h.fpr}%</div>
-          <div class="text-[11px] text-slate-300">False Positive Rate</div>
-          <div class="text-[10px] text-slate-400">TP:${h.TP} TN:${h.TN} FP:${h.FP} FN:${h.FN}</div>
+          <div class="text-[11px] text-slate-300 font-black">False Positive Rate</div>
+          <div class="text-[10px] text-slate-400 font-bold">TP:${h.TP} TN:${h.TN} FP:${h.FP} FN:${h.FN}</div>
         </div>
         <div class="bg-[#080c15] p-2.5 rounded-lg border border-slate-800 text-left text-[10px]">
-          <div class="text-amber-300 font-extrabold mb-1">Hədd Müqayisəsi:</div>
+          <div class="text-amber-300 font-black mb-1">Hədd Müqayisəsi:</div>
           <div>T=50 → Rec:${t50.recall}% | FPR:${t50.fpr}%</div>
-          <div class="text-emerald-300 font-bold">T=60 → Rec:${t60.recall}% | FPR:${t60.fpr}%</div>
+          <div class="text-emerald-300 font-black">T=60 → Rec:${t60.recall}% | FPR:${t60.fpr}%</div>
           <div>T=70 → Rec:${t70.recall}% | FPR:${t70.fpr}%</div>
         </div>
       `;
@@ -664,7 +663,7 @@
         document.getElementById('kpi-click-count').innerText = '0 dəfə';
         document.getElementById('globe-click-badge').innerText = '🖱️ Klik: 0 dəfə';
         document.getElementById('ml-banner').classList.add('hidden');
-        document.getElementById('engine-logs').innerHTML = '<div class="text-purple-300 font-bold">[ML-RESET] Analitik tokeni doğrulandı — ML yaddaşı və klik sayğacı sıfırlandı.</div>';
+        document.getElementById('engine-logs').innerHTML = '<div class="text-purple-300 font-black">[ML-RESET] Analitik tokeni doğrulandı — ML yaddaşı və klik sayğacı sıfırlandı.</div>';
       }
     };
 
@@ -701,7 +700,7 @@
     window.analyzeApk = async function() {
       const inp = document.getElementById('apk-input');
       if (!inp.files.length) {
-        document.getElementById('engine-logs').innerHTML = '<div class="text-amber-300 font-extrabold">[XƏBƏRDARLIQ] Əvvəlcə Choose File düyməsinə basıb Kapital_Tehlukesizlik_Yenilemesi.apk faylını seçin!</div>';
+        document.getElementById('engine-logs').innerHTML = '<div class="text-amber-300 font-black">[XƏBƏRDARLIQ] Əvvəlcə Choose File düyməsinə basıb faylı seçin!</div>';
         return;
       }
       const fd = new FormData();
@@ -750,7 +749,6 @@
       document.getElementById('kpi-detected-ip').innerText = activeAttackerIp;
       document.getElementById('map-live-ip-badge').innerText = 'Relay: ' + activeAttackerIp + ' → Baku';
 
-      // Update Prominent Click Counters at Top!
       document.getElementById('kpi-click-count').innerText = clickCount + ' dəfə';
       document.getElementById('globe-click-badge').innerText = '🖱️ Klik: ' + clickCount + ' dəfə';
 
@@ -771,19 +769,19 @@
       let colorHex = '#38bdf8';
       if (score >= 60) {
         colorHex = '#f43f5e';
-        pill.className = 'px-3 py-1 rounded-full bg-rose-500/25 text-rose-200 border border-rose-400 font-mono text-xs font-extrabold';
+        pill.className = 'px-3 py-1 rounded-full bg-rose-500/25 text-rose-200 border border-rose-400 font-mono text-xs font-black';
         pill.innerText = '🚨 ' + (data.level || 'KRİTİK TƏHLÜKƏ');
         totalBlocked++;
         document.getElementById('kpi-total-threats').innerText = totalBlocked.toLocaleString();
 
         const feed = document.getElementById('attack-feed-list');
         const row = document.createElement('div');
-        row.className = 'flex items-center justify-between text-rose-200 bg-rose-500/15 px-1.5 py-0.5 rounded';
+        row.className = 'flex items-center justify-between text-rose-200 bg-rose-500/15 px-1.5 py-0.5 rounded font-black';
         row.innerHTML = '<span class="truncate"><span class="text-rose-400">●</span> ' + (data.target || 'Threat').slice(0, 20) + ' (' + clickCount + 'x)</span><span class="text-rose-300 font-bold shrink-0">' + activeAttackerIp + ' → .AZ</span>';
         feed.prepend(row);
         if (feed.children.length > 4) feed.removeChild(feed.lastChild);
       } else {
-        pill.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 font-mono text-xs font-extrabold';
+        pill.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 font-mono text-xs font-black';
         pill.innerText = '✓ ' + (data.level || 'TƏHLÜKƏSİZ');
       }
 
@@ -828,65 +826,56 @@
       }
 
       document.getElementById('hybrid-actions-list').innerHTML = (data.hybrid_actions || []).map(a =>
-        '<div class="flex items-start gap-2"><span class="text-sky-400">▸</span><span>' + a + '</span></div>'
+        '<div class="flex items-start gap-2"><span class="text-sky-400 font-black">▸</span><span>' + a + '</span></div>'
       ).join('');
       document.getElementById('mitre-tags').innerHTML = (data.mitre || ['MITRE ATT&CK']).map(m =>
-        '<span class="text-[11px] font-mono font-extrabold px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/50">' + m + '</span>'
+        '<span class="text-[11px] font-mono font-black px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/50">' + m + '</span>'
       ).join('');
 
       document.getElementById('intel-table-body').innerHTML = engines.map(e => {
         const isBad = e.verdict.includes('MALICIOUS') || e.verdict.includes('BLOCKED') || e.verdict.includes('VERIFIED PHISH') || e.verdict.includes('HIGH') || e.verdict.includes('FLAGGED');
         const isWarn = e.verdict.includes('SUSPICIOUS') || e.verdict.includes('WARNING') || e.verdict.includes('MODERATE');
         const vClass = isBad ? 'bg-rose-500/25 text-rose-200 border border-rose-400/50' : (isWarn ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50' : 'bg-emerald-500/25 text-emerald-200 border border-emerald-400/50');
-        return '<tr class="hover:bg-slate-900/80"><td class="py-2.5 px-3.5 font-extrabold text-white">' + e.engine + '</td><td class="py-2.5 px-3.5"><span class="px-2 py-0.5 rounded font-mono text-[11px] font-extrabold ' + vClass + '">' + e.verdict + '</span></td><td class="py-2.5 px-3.5 font-mono text-sky-300 font-extrabold">' + e.confidence + '</td><td class="py-2.5 px-3.5 text-slate-200 font-bold">' + e.detail + '</td></tr>';
+        return '<tr class="hover:bg-slate-900/80"><td class="py-2.5 px-3.5 font-black text-white">' + e.engine + '</td><td class="py-2.5 px-3.5"><span class="px-2 py-0.5 rounded font-mono text-[11px] font-black ' + vClass + '">' + e.verdict + '</span></td><td class="py-2.5 px-3.5 font-mono text-sky-300 font-black">' + e.confidence + '</td><td class="py-2.5 px-3.5 text-slate-200 font-bold">' + e.detail + '</td></tr>';
       }).join('');
 
       document.getElementById('rules-table-body').innerHTML = (data.rules || []).map(r =>
-        '<tr class="hover:bg-slate-900/80"><td class="py-2 px-3 font-mono text-sky-400 font-extrabold">' + r.id + '</td><td class="py-2 px-3 font-extrabold text-white">' + r.category + '</td><td class="py-2 px-3 text-slate-200 font-bold">' + r.proof + '</td><td class="py-2 px-3 text-right font-mono font-extrabold ' + (r.weight >= 25 ? 'text-rose-400' : 'text-amber-300') + '">+' + r.weight + '</td></tr>'
+        '<tr class="hover:bg-slate-900/80"><td class="py-2 px-3 font-mono text-sky-400 font-black">' + r.id + '</td><td class="py-2 px-3 font-black text-white">' + r.category + '</td><td class="py-2 px-3 text-slate-200 font-bold">' + r.proof + '</td><td class="py-2 px-3 text-right font-mono font-black ' + (r.weight >= 25 ? 'text-rose-400' : 'text-amber-300') + '">+' + r.weight + '</td></tr>'
       ).join('');
 
       document.getElementById('telemetry-table-body').innerHTML = (data.telemetry || []).map(t => {
         const stBadge = t.status === 'CRIT'
-          ? '<span class="px-2 py-0.5 rounded bg-rose-500/25 text-rose-200 font-mono text-[11px] font-extrabold">KRİTİK</span>'
+          ? '<span class="px-2 py-0.5 rounded bg-rose-500/25 text-rose-200 font-mono text-[11px] font-black">KRİTİK</span>'
           : (t.status === 'WARN'
-            ? '<span class="px-2 py-0.5 rounded bg-amber-500/25 text-amber-200 font-mono text-[11px] font-extrabold">ŞÜBHƏLİ</span>'
-            : '<span class="px-2 py-0.5 rounded bg-emerald-500/25 text-emerald-200 font-mono text-[11px] font-extrabold">OK</span>');
-        return '<tr class="hover:bg-slate-900/80"><td class="py-2 px-3 font-extrabold text-slate-300">' + t.param + '</td><td class="py-2 px-3 font-mono text-white font-bold break-all">' + t.value + '</td><td class="py-2 px-3 text-right">' + stBadge + '</td></tr>';
+            ? '<span class="px-2 py-0.5 rounded bg-amber-500/25 text-amber-200 font-mono text-[11px] font-black">ŞÜBHƏLİ</span>'
+            : '<span class="px-2 py-0.5 rounded bg-emerald-500/25 text-emerald-300 font-mono text-[11px] font-black">OK</span>');
+        return '<tr class="hover:bg-slate-900/80"><td class="py-2 px-3 font-black text-slate-300">' + t.param + '</td><td class="py-2 px-3 font-mono text-white font-bold break-all">' + t.value + '</td><td class="py-2 px-3 text-right">' + stBadge + '</td></tr>';
       }).join('');
 
       document.getElementById('engine-logs').innerHTML = (data.logs || []).map(l => {
         const cls = l.includes('ML-FASTPATH') || l.includes('FALSE-POSITIVE')
-          ? 'text-purple-300 font-extrabold'
-          : ((l.includes('SPOOF') || l.includes('DETECT') || l.includes('SSRF') || l.includes('HOMOGLYPH') || l.includes('ADVERSARIAL')) ? 'text-rose-300 font-extrabold' : 'text-emerald-300 font-bold');
+          ? 'text-purple-300 font-black'
+          : ((l.includes('SPOOF') || l.includes('DETECT') || l.includes('SSRF') || l.includes('HOMOGLYPH') || l.includes('ADVERSARIAL')) ? 'text-rose-300 font-black' : 'text-emerald-300 font-bold');
         return '<div class="' + cls + '">' + l + '</div>';
       }).join('');
     }
 
-    // ---------------- 3D SPINNING CYBER THREAT GLOBE (100% OFFLINE CANVAS) ----------------
+    // ---------------- 3D GLOBE ----------------
     const globeCanvas = document.getElementById('cyberGlobe3D');
     const gCtx = globeCanvas.getContext('2d');
     let globeAngle = 0.5;
     let packetPulse = 0;
 
-    // Stylized landmass coordinates (lat, lon) to form recognizable continents on the 3D sphere
     const landClusters = [
-      // North America
       [45,-100],[40,-95],[38,-110],[50,-115],[55,-105],[35,-85],[42,-75],[30,-95],[25,-102],[60,-135],
-      // South America
       [-5,-60],[-12,-55],[-20,-50],[-30,-60],[-15,-70],[-35,-65],[-45,-68],
-      // Europe
       [48,10],[52,15],[45,2],[40,-4],[55,25],[60,15],[50,30],[42,14],
-      // Caucasus / Azerbaijan region
       [40.4,49.8],[41.5,45.0],[39.5,47.5],
-      // Africa
       [25,15],[15,20],[5,25],[-5,22],[-15,25],[-25,24],[10,5],[20,30],[0,35],
-      // Asia & Russia
       [58,60],[62,85],[60,115],[52,105],[45,75],[38,65],[35,105],[30,115],[25,80],[20,78],[36,138],[15,102],
-      // Australia
       [-22,132],[-28,145],[-32,120],[-20,142]
     ];
 
-    // Expand cluster into dense cyber-dots
     const globeLandDots = [];
     landClusters.forEach(([lat, lon]) => {
       for (let dLat = -4; dLat <= 4; dLat += 4) {
@@ -899,7 +888,7 @@
     function project3D(latDeg, lonDeg, rotRad, cx, cy, R) {
       const lat = (latDeg * Math.PI) / 180;
       const lon = (lonDeg * Math.PI) / 180 + rotRad;
-      const tilt = 0.25; // slight axial tilt
+      const tilt = 0.25;
       const x0 = R * Math.cos(lat) * Math.sin(lon);
       const y0 = -R * Math.sin(lat);
       const z0 = R * Math.cos(lat) * Math.cos(lon);
@@ -910,10 +899,10 @@
     }
 
     const globeRelays = [
-      { lat: 50.1, lon: 8.6, color: '#f43f5e', ip: '185.220.101.44' }, // Frankfurt/EU Relay
-      { lat: 39.0, lon: -77.0, color: '#f59e0b', ip: '104.21.44.12' }, // US Relay
-      { lat: 35.6, lon: 139.6, color: '#f43f5e', ip: '103.85.24.19' }, // APAC Relay
-      { lat: 55.7, lon: 37.6, color: '#38bdf8', ip: '45.142.212.90' }  // RU Relay
+      { lat: 50.1, lon: 8.6, color: '#f43f5e', ip: '185.220.101.44' },
+      { lat: 39.0, lon: -77.0, color: '#f59e0b', ip: '104.21.44.12' },
+      { lat: 35.6, lon: 139.6, color: '#f43f5e', ip: '103.85.24.19' },
+      { lat: 55.7, lon: 37.6, color: '#38bdf8', ip: '45.142.212.90' }
     ];
 
     function draw3DCyberGlobe() {
@@ -923,13 +912,11 @@
 
       gCtx.clearRect(0, 0, w, h);
 
-      // Subtle sci-fi background grid & orbital rings
       gCtx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
       gCtx.lineWidth = 1;
       for (let gx = 40; gx < w; gx += 60) { gCtx.beginPath(); gCtx.moveTo(gx, 0); gCtx.lineTo(gx, h); gCtx.stroke(); }
       for (let gy = 30; gy < h; gy += 45) { gCtx.beginPath(); gCtx.moveTo(0, gy); gCtx.lineTo(w, gy); gCtx.stroke(); }
 
-      // Outer atmospheric glow
       const glow = gCtx.createRadialGradient(cx, cy, R * 0.65, cx, cy, R * 1.28);
       glow.addColorStop(0, mapAlertActive ? 'rgba(244, 63, 94, 0.14)' : 'rgba(14, 165, 233, 0.16)');
       glow.addColorStop(1, 'rgba(6, 10, 18, 0)');
@@ -938,13 +925,11 @@
       gCtx.arc(cx, cy, R * 1.28, 0, Math.PI * 2);
       gCtx.fill();
 
-      // Core sphere dark fill
       gCtx.fillStyle = '#091224';
       gCtx.beginPath();
       gCtx.arc(cx, cy, R, 0, Math.PI * 2);
       gCtx.fill();
 
-      // Tilted orbital ring around globe
       gCtx.save();
       gCtx.translate(cx, cy);
       gCtx.rotate(-0.22);
@@ -955,7 +940,6 @@
       gCtx.stroke();
       gCtx.restore();
 
-      // Longitude & Latitude wireframe lines
       for (let lon = -180; lon < 180; lon += 30) {
         gCtx.beginPath();
         for (let lat = -85; lat <= 85; lat += 10) {
@@ -979,7 +963,6 @@
         gCtx.stroke();
       }
 
-      // Continent cyber-dots (front hemisphere bright, back dim)
       globeLandDots.forEach(d => {
         const p = project3D(d.lat, d.lon, globeAngle, cx, cy, R);
         if (p.z > 0) {
@@ -995,17 +978,14 @@
         }
       });
 
-      // Sphere outer rim border
       gCtx.strokeStyle = mapAlertActive ? 'rgba(244, 63, 94, 0.65)' : 'rgba(56, 189, 248, 0.5)';
       gCtx.lineWidth = 1.6;
       gCtx.beginPath();
       gCtx.arc(cx, cy, R, 0, Math.PI * 2);
       gCtx.stroke();
 
-      // BAKU SOC 3D Node (40.4 N, 49.8 E)
       const baku = project3D(40.4, 49.8, globeAngle, cx, cy, R);
 
-      // Draw 3D Attack Arcs from Relay IPs to BAKU SOC
       globeRelays.forEach((rel, idx) => {
         const src = project3D(rel.lat, rel.lon, globeAngle, cx, cy, R);
         const midX = (src.x + baku.x) / 2;
@@ -1019,7 +999,6 @@
         gCtx.quadraticCurveTo(midX, midY, baku.x, baku.y);
         gCtx.stroke();
 
-        // Moving threat packet along 3D arc
         const t = (packetPulse + idx * 0.25) % 1;
         const px = (1 - t) * (1 - t) * src.x + 2 * (1 - t) * t * midX + t * t * baku.x;
         const py = (1 - t) * (1 - t) * src.y + 2 * (1 - t) * t * midY + t * t * baku.y;
@@ -1028,7 +1007,6 @@
         gCtx.arc(px, py, 3.2, 0, Math.PI * 2);
         gCtx.fill();
 
-        // Relay node dot & IP tag when on front side
         if (src.z > -20) {
           gCtx.fillStyle = rel.color;
           gCtx.beginPath();
@@ -1042,7 +1020,6 @@
         }
       });
 
-      // Render BAKU SOC Beacon
       const pulseR = 6 + Math.sin(packetPulse * Math.PI * 4) * 3.5;
       gCtx.strokeStyle = mapAlertActive ? 'rgba(244, 63, 94, 0.85)' : 'rgba(56, 189, 248, 0.85)';
       gCtx.lineWidth = 1.8;
@@ -1080,7 +1057,7 @@
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(148, 163, 184, 0.18)' }, angleLines: { color: 'rgba(148, 163, 184, 0.18)' }, pointLabels: { color: '#e2e8f0', font: { size: 10, weight: '700' } } } },
+        scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(148, 163, 184, 0.18)' }, angleLines: { color: 'rgba(148, 163, 184, 0.18)' }, pointLabels: { color: '#e2e8f0', font: { size: 11, weight: '800' } } } },
         plugins: { legend: { display: false } }
       }
     });
@@ -1088,7 +1065,7 @@
     consensusChart = safeChart('consensusChart', {
       type: 'doughnut',
       data: { labels: ['Malicious', 'Suspicious', 'Clean'], datasets: [{ data: [0, 0, 8], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'], borderWidth: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', font: { size: 10, weight: '700' } } } } }
+      options: { responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', font: { size: 11, weight: '800' } } } } }
     });
 
     trendLineChart = safeChart('trendLineChart', {
@@ -1102,7 +1079,7 @@
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        scales: { x: { ticks: { color: '#64748b', font: { size: 9 } }, grid: { display: false } }, y: { ticks: { color: '#64748b', font: { size: 9 } }, grid: { color: 'rgba(71, 85, 105, 0.2)' } } },
+        scales: { x: { ticks: { color: '#94a3b8', font: { size: 10, weight: '700' } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', font: { size: 10, weight: '700' } }, grid: { color: 'rgba(71, 85, 105, 0.2)' } } },
         plugins: { legend: { display: false } }
       }
     });
@@ -1113,8 +1090,8 @@
       options: {
         responsive: true, maintainAspectRatio: false,
         scales: {
-          y: { min: 0, max: 100, grid: { color: 'rgba(71, 85, 105, 0.2)' }, ticks: { color: '#cbd5e1', font: { size: 9, weight: '700' } } },
-          x: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 10, weight: '700' } } }
+          y: { min: 0, max: 100, grid: { color: 'rgba(71, 85, 105, 0.2)' }, ticks: { color: '#cbd5e1', font: { size: 10, weight: '800' } } },
+          x: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 11, weight: '800' } } }
         },
         plugins: { legend: { display: false } }
       }
